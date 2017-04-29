@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="Sample Category"
+            id="de.uniluebeck.isp.Tessla.ui.commands.category">
+      </category>
+      <command
+            name="Sample Command"
+            categoryId="de.uniluebeck.isp.Tessla.ui.commands.category"
+            id="de.uniluebeck.isp.Tessla.ui.commands.sampleCommand">
+      </command>
+      <command
+            name="Run Command"
+            categoryId="de.uniluebeck.isp.Tessla.ui.commands.category"
+            id="de.uniluebeck.isp.Tessla.ui.commands.runCommand">
+      </command>
+      <command
+            name="Build Command"
+            categoryId="de.uniluebeck.isp.Tessla.ui.commands.category"
+            id="de.uniluebeck.isp.Tessla.ui.commands.buildCommand">
+      </command>      
+      <command
+            name="Build and Run Command"
+            categoryId="de.uniluebeck.isp.Tessla.ui.commands.category"
+            id="de.uniluebeck.isp.Tessla.ui.commands.buildAndRunCommand">            
+      </command>  
+      <command
+            name="Build and Run and Analyze Command"
+            categoryId="de.uniluebeck.isp.Tessla.ui.commands.category"
+            id="de.uniluebeck.isp.Tessla.ui.commands.buildAndRunAndAnalyzeCommand">            
+      </command> 
+      <command
+            name="Stop Command"
+            categoryId="de.uniluebeck.isp.Tessla.ui.commands.category"
+            id="de.uniluebeck.isp.Tessla.ui.commands.stopCommand">
+      </command>                
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="de.uniluebeck.isp.Tessla.ui.commands.sampleCommand"
+            class="de.uniluebeck.isp.tessla.ui.handlers.SampleHandler">
+      </handler>
+      <handler
+            commandId="de.uniluebeck.isp.Tessla.ui.commands.runCommand"
+            class="de.uniluebeck.isp.tessla.ui.handlers.RunHandler">
+      </handler>
+      <handler
+            commandId="de.uniluebeck.isp.Tessla.ui.commands.buildCommand"
+            class="de.uniluebeck.isp.tessla.ui.handlers.BuildHandler">
+      </handler>      
+      <handler
+            commandId="de.uniluebeck.isp.Tessla.ui.commands.buildAndRunCommand"
+            class="de.uniluebeck.isp.tessla.ui.handlers.BuildAndRunHandler">
+      </handler>  
+      <handler
+            commandId="de.uniluebeck.isp.Tessla.ui.commands.buildAndRunAndAnalyzeCommand"
+            class="de.uniluebeck.isp.tessla.ui.handlers.BuildAndRunAndAnalyzeHandler">
+      </handler> 
+      <handler
+            commandId="de.uniluebeck.isp.Tessla.ui.commands.stopCommand"
+            class="de.uniluebeck.isp.tessla.ui.handlers.StopHandler">
+      </handler>                      
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="de.uniluebeck.isp.Tessla.ui.commands.sampleCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M1+6"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               label="Tessla"
+               mnemonic="M"
+               id="de.uniluebeck.isp.Tessla.ui.menus.tessla">
+            <command
+                  commandId="de.uniluebeck.isp.Tessla.ui.commands.sampleCommand"
+                  mnemonic="S"
+                  id="de.uniluebeck.isp.Tessla.ui.menus.sampleCommand">
+            </command>
+            <command
+                  commandId="de.uniluebeck.isp.Tessla.ui.commands.runCommand"
+                  id="de.uniluebeck.isp.Tessla.ui.menus.runCommand">
+            </command>
+            <command
+                  commandId="de.uniluebeck.isp.Tessla.ui.commands.buildCommand"
+                  id="de.uniluebeck.isp.Tessla.ui.menus.buildCommand">
+            </command>    
+            <command
+                  commandId="de.uniluebeck.isp.Tessla.ui.commands.buildAndRunCommand"
+                  id="de.uniluebeck.isp.Tessla.ui.menus.buildAndRunCommand">
+            </command>            
+            <command
+                  commandId="de.uniluebeck.isp.Tessla.ui.commands.buildAndRunAndAnalyzeCommand"
+                  id="de.uniluebeck.isp.Tessla.ui.menus.buildAndRunAndAnalyzeCommand">
+            </command>   
+            <command
+                  commandId=" de.uniluebeck.isp.Tessla.ui.commands.stopCommand"
+                  id="de.uniluebeck.isp.Tessla.ui.menus.stopCommand">
+            </command>  
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="de.uniluebeck.isp.Tessla.ui.toolbars.tesslaToolbar">
+            <command
+                  commandId="de.uniluebeck.isp.Tessla.ui.commands.sampleCommand"
+                  icon="icons/sample.gif"
+                  tooltip="Say hello world"
+                  id="de.uniluebeck.isp.Tessla.ui.toolbars.sampleCommand">
+            </command>
+            <command
+                  commandId="de.uniluebeck.isp.Tessla.ui.commands.runCommand"
+                  icon="icons/run.gif"
+                  tooltip="Run"
+                  id="de.uniluebeck.isp.Tessla.ui.toolbars.runCommand">
+            </command>
+            <command
+                  commandId="de.uniluebeck.isp.Tessla.ui.commands.buildCommand"
+                  icon="icons/run.gif"
+                  tooltip="Build"
+                  id="de.uniluebeck.isp.Tessla.ui.toolbars.buildCommand">
+            </command>            
+            <command
+                  commandId="de.uniluebeck.isp.Tessla.ui.commands.buildAndRunCommand"
+                  icon="icons/run_and_build.gif"
+                  style="push"
+                  tooltip="Build and Run"
+                  id="de.uniluebeck.isp.Tessla.ui.toolbars.buildAndRunCommand">
+            </command>
+            <command
+                  commandId="de.uniluebeck.isp.Tessla.ui.commands.buildAndRunAndAnalyzeCommand"
+                  icon="icons/run_and_build.gif"
+                  style="push"
+                  tooltip="Build and Run and Analyze"
+                  id="de.uniluebeck.isp.Tessla.ui.toolbars.buildAndRunAndAnalyzeCommand">
+            </command> 
+            <command
+                  commandId="de.uniluebeck.isp.Tessla.ui.commands.stopCommand"
+                  icon="icons/run.gif"
+                  tooltip="Stop"
+                  id="de.uniluebeck.isp.Tessla.ui.toolbars.stopCommand">
+            </command>                                         
+         </toolbar>
+      </menuContribution>
+   </extension>
+
+</plugin>

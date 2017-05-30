@@ -90,7 +90,8 @@ public class BuildAndRunHandler extends AbstractHandler {
 		
 		final DockerClient docker = builder.build();
 		
-		final File imageFile = new File("C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Atom/tessla");
+//		final File imageFile = new File("C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Atom/tessla");
+		final File imageFile = new File("/home/annika/Entwicklung/Files/tessla");
 		final String image = "tessla" + System.nanoTime();
 		try (InputStream imagePayload = new BufferedInputStream(new FileInputStream(imageFile))) {
 		  docker.create(image, imagePayload);
@@ -101,7 +102,9 @@ public class BuildAndRunHandler extends AbstractHandler {
 		for (String port : ports) {
 		    List<PortBinding> hostPorts = new ArrayList<>();
 		    
-		    hostPorts.add(PortBinding.of("192.168.99.100", port));
+		    // die 192.168.99.100 geht bei Linux iwie nicht. Funktioniert nur auf Windows
+//		    hostPorts.add(PortBinding.of("192.168.99.100", port));
+		    hostPorts.add(PortBinding.of("127.0.0.1", port));
 		    portBindings.put(port, hostPorts);
 		}
 		
@@ -109,7 +112,8 @@ public class BuildAndRunHandler extends AbstractHandler {
 				.portBindings(portBindings)
 //				.appendBinds("/local/path:/remote/path")
 //				.appendBinds("C:/Users/lenovo/SSEProjekt/shared:c:/src")
-				.appendBinds("/Users/lenovo/SSEProjekt/shared:/src")
+//				.appendBinds("/Users/lenovo/SSEProjekt/shared:/src")
+				.appendBinds("/home/annika/geteilt:/usr/geteilt")
 				.build();
 
 //		docker.pull("busybox");
@@ -117,7 +121,7 @@ public class BuildAndRunHandler extends AbstractHandler {
 //		-v /Users/<path>:/<container path> ...
 //		https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume
 //		If you are using Docker Machine on Mac or Windows, your Docker Engine daemon has only limited access to your macOS or Windows filesystem. Docker Machine tries to auto-share your /Users (macOS) or C:\Users (Windows) directory. S
-//		All other paths come from your virtual machine’s filesystem, so if you want to make some other host folder available for sharing, you need to do additional work.
+//		All other paths come from your virtual machineï¿½s filesystem, so if you want to make some other host folder available for sharing, you need to do additional work.
 //		String shared = "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/shared:/src";
 //		String shared = "C:/Users/lenovo/SSEProjekt/shared:c:/src";
 //		String shared = "C:/Users/lenovo/SSEProjekt/shared:/src";
@@ -143,7 +147,7 @@ public class BuildAndRunHandler extends AbstractHandler {
 		final ContainerInfo info = docker.inspectContainer(id);
 
 		System.out.println("info: " + info);
-		
+		// geht in Linux iwie nicht, funktioniert nur auf Windows. Ka warum
 //		Volume volumes = docker.inspectVolume(id);
 //		System.out.println("volumes: " + volumes);
 		
@@ -186,6 +190,8 @@ public class BuildAndRunHandler extends AbstractHandler {
 		// Kill container
 		docker.killContainer(id);
 
+		System.out.println("Container killed");
+		
 		// Remove container
 		docker.removeContainer(id);
 
@@ -238,7 +244,8 @@ public class BuildAndRunHandler extends AbstractHandler {
 //		args.addAll(Arrays.asList("clang", "C:/Users/lenovo/Downloads/AIT/foo.c", "-o", "C:/Users/lenovo/Downloads/AIT/foo", "-S", "-emit-llvm"));
 //		args.addAll(Arrays.asList("clang", "src/foo.c", "-o", "src/foo", "-S", "-emit-llvm"));
 //		args.addAll(Arrays.asList("clang", "/src/foo.c", "-o", "src/foo", "-S", "-emit-llvm"));
-		args.addAll(Arrays.asList("clang", "usr/src/foo.c", "-o", "src/foo", "-S", "-emit-llvm"));
+//		args.addAll(Arrays.asList("clang", "usr/src/foo.c", "-o", "src/foo", "-S", "-emit-llvm"));
+		args.addAll(Arrays.asList("clang", "usr/geteilt/foo.c", "-o", "usr/geteilt/foo", "-S", "-emit-llvm"));
 
 		
 		

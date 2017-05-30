@@ -34,7 +34,15 @@ Bundle-ClassPath: lib/commons-lang-2.6.jar,
  lib/hk2-locator-2.4.0.jar,
  lib/hk2-utils-2.4.0.jar,
  lib/httpclient-4.5.3.jar,
- lib/httpcore-4.4.6.jar
+ lib/httpcore-4.4.6.jar,
+ lib/asm-all-5.0.3.jar,
+ lib/jnr-constants-0.8.7.jar,
+ lib/jnr-enxio-0.9.jar,
+ lib/jnr-ffi-2.0.3.jar,
+ lib/jnr-posix-3.0.12.jar,
+ lib/jnr-unixsocket-0.8.jar,
+ lib/jffi-1.2.9-native.jar,
+ lib/jffi-1.2.9.jar
 Bundle-Activator: de.uniluebeck.isp.tessla.ui.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime

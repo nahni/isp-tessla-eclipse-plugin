@@ -30,8 +30,6 @@ import com.spotify.docker.client.messages.ContainerInfo;
 import com.spotify.docker.client.messages.ExecCreation;
 import com.spotify.docker.client.messages.HostConfig;
 import com.spotify.docker.client.messages.PortBinding;
-import com.spotify.docker.client.messages.Volume;
-import com.spotify.docker.client.messages.VolumeList;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -108,6 +106,10 @@ public class BuildAndRunHandler extends AbstractHandler {
 		    portBindings.put(port, hostPorts);
 		}
 		
+//		-v /Users/<path>:/<container path> ...
+//		https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume
+//		If you are using Docker Machine on Mac or Windows, your Docker Engine daemon has only limited access to your macOS or Windows filesystem. Docker Machine tries to auto-share your /Users (macOS) or C:\Users (Windows) directory. S
+//		All other paths come from your virtual machine�s filesystem, so if you want to make some other host folder available for sharing, you need to do additional work.
 		final HostConfig hostConfig = HostConfig.builder()
 				.portBindings(portBindings)
 //				.appendBinds("/local/path:/remote/path")
@@ -118,25 +120,14 @@ public class BuildAndRunHandler extends AbstractHandler {
 
 //		docker.pull("busybox");
 		
-//		-v /Users/<path>:/<container path> ...
-//		https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume
-//		If you are using Docker Machine on Mac or Windows, your Docker Engine daemon has only limited access to your macOS or Windows filesystem. Docker Machine tries to auto-share your /Users (macOS) or C:\Users (Windows) directory. S
-//		All other paths come from your virtual machine�s filesystem, so if you want to make some other host folder available for sharing, you need to do additional work.
-//		String shared = "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/shared:/src";
-//		String shared = "C:/Users/lenovo/SSEProjekt/shared:c:/src";
-//		String shared = "C:/Users/lenovo/SSEProjekt/shared:/src";
-		String shared = "/Users/lenovo/SSEProjekt/shared:/src";
-		
+
 		// Create container with exposed ports
 		final ContainerConfig containerConfig = ContainerConfig.builder()
 		    .hostConfig(hostConfig)
 //		    .image("busybox").exposedPorts(ports)
-//		    .image("C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Atom/tessla").exposedPorts(ports)
 		    .image("tessla").exposedPorts(ports)
 		    //-rm
 		    .cmd("sh", "-c", "while :; do sleep 1; done")
-		    //-v : /src/webapp:/webapp This command mounts the host directory, /src/webapp, into the container at /webapp
-//		    .cmd("sh", "-c", "while :; do sleep 1; done", "-v " + shared, "-w /src")
 //		    .cmd(args)
 		    .build();
 
@@ -150,26 +141,6 @@ public class BuildAndRunHandler extends AbstractHandler {
 		// geht in Linux iwie nicht, funktioniert nur auf Windows. Ka warum
 //		Volume volumes = docker.inspectVolume(id);
 //		System.out.println("volumes: " + volumes);
-		
-		final VolumeList volumeList = docker.listVolumes();
-		final List<String> warnings = volumeList.warnings();
-		final List<Volume> volumes = volumeList.volumes();
-		
-		if(warnings != null){
-			System.out.println("Warnings:");
-			for (String string : warnings) {
-				System.out.println(string);
-			}
-		}
-		
-		if(volumes != null){
-			System.out.println("Volumes: ");
-			for (Volume volume : volumes) {
-				System.out.println(volume);
-			}
-		}else{
-			System.out.println("Volumes null!");
-		}
 		
 		// Start container
 		docker.startContainer(id);
@@ -201,21 +172,21 @@ public class BuildAndRunHandler extends AbstractHandler {
 	}
 
 	private String[] getArgs() {
-		// get docker command args
-		// const outFile = path.join('build', this.activeProject.binName +
-		// (buildAssembly ? '.bc' : ''))
-
+		boolean buildAssembly = true;
 		String activeProject_projPath = "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/";
 		String activeProject_binName = "sub_add_alternation";
-		String outFile = "build/" + activeProject_binName + ".bc";
-		boolean buildAssembly = true;
-
+		String outFile = "build/" + activeProject_binName + (buildAssembly ? ".bc" : "");
+		
+		//TODO rausnehmen
+		activeProject_projPath = "usr/geteilt/";
+		outFile = "usr/geteilt/foo";
+		
 		List<String> args = new ArrayList<String>();
-//		args.addAll(Arrays.asList("exec", "tessla", "clang", "-o", outFile));
+		//TODO exec und tessla war noch angegeben:
+		// args.addAll(Arrays.asList("exec", "tessla", "clang", "-o", outFile));
 		args.addAll(Arrays.asList("clang", "-o", outFile));
 
 		if (buildAssembly) {
-			// args = args.concat(['-emit-llvm', '-S'])
 			args.addAll(Arrays.asList("-emit-llvm", "-S"));
 		}
 
@@ -224,38 +195,8 @@ public class BuildAndRunHandler extends AbstractHandler {
 		// return path.relative(this.activeProject.projPath, arg).replace(/\\/g,
 		// '/')
 		// }))
-
 		args.add(activeProject_projPath + "foo.c");
 
-		//Stueck fuer Stueck:
-//		 clang -S -emit-llvm foo.c
-		args = new ArrayList<String>();
-//		args.addAll(Arrays.asList("clang", "-S", "-emit-llvm", "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/foo.c"));
-
-		//You're not in the same directory as your hello.c file. cd to the right directory, or use provide gcc with the path to the file:
-		//gcc /home/oli/Desktop/hello.c -o hello
-//		args.addAll(Arrays.asList("clang", "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/foo", "-o", "foo.c", "-S", "-emit-llvm"));
-
-//		You need to have the code file (in this case helloworld.cpp) in your current working directory. If the code file is in a different directory, you need to specify where in the command. For example
-//		g++ some/other/folder/helloworld.cpp -o helloworld.o
-//		args.addAll(Arrays.asList("clang", "'C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/foo.c'", "-o", "foo", "-S", "-emit-llvm"));
-//		args.addAll(Arrays.asList("clang", "\"C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/foo.c\"", "-o", "foo", "-S", "-emit-llvm"));
-//		args.addAll(Arrays.asList("clang", "C:/Users/lenovo/Downloads/AIT/foo.c", "-o", "foo", "-S", "-emit-llvm"));
-//		args.addAll(Arrays.asList("clang", "C:/Users/lenovo/Downloads/AIT/foo.c", "-o", "C:/Users/lenovo/Downloads/AIT/foo", "-S", "-emit-llvm"));
-//		args.addAll(Arrays.asList("clang", "src/foo.c", "-o", "src/foo", "-S", "-emit-llvm"));
-//		args.addAll(Arrays.asList("clang", "/src/foo.c", "-o", "src/foo", "-S", "-emit-llvm"));
-//		args.addAll(Arrays.asList("clang", "usr/src/foo.c", "-o", "src/foo", "-S", "-emit-llvm"));
-		args.addAll(Arrays.asList("clang", "usr/geteilt/foo.c", "-o", "usr/geteilt/foo", "-S", "-emit-llvm"));
-
-		
-		
-		//		clang -emit-llvm -o foo.bc -c foo.c
-//		args.addAll(Arrays.asList("clang", "-emit-llvm", "-o", "foo.bc", "-c", "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/foo.c"));
-
-//		clang -o foo foo.bc
-//		args.addAll(Arrays.asList("clang", "-o", "-foo", "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/foo.c"));
-
-		
 		String[] argsArray = new String[args.size()];
 		argsArray = args.toArray(argsArray);
 

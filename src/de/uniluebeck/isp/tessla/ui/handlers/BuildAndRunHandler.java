@@ -147,7 +147,7 @@ public class BuildAndRunHandler extends AbstractHandler {
 
 		// Exec command inside running container with attached STDOUT and STDERR
 //		final String[] command = {"bash", "-c", "ls"};
-		String[] command = getArgs();
+		String[] command = getBuildCCodeArgs();
 		final ExecCreation execCreation = docker.execCreate(
 		    id, command, DockerClient.ExecCreateParam.attachStdout(),
 		    DockerClient.ExecCreateParam.attachStderr());
@@ -171,7 +171,7 @@ public class BuildAndRunHandler extends AbstractHandler {
 
 	}
 
-	private String[] getArgs() {
+	private String[] getBuildCCodeArgs() {
 		boolean buildAssembly = true;
 		String activeProject_projPath = "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/";
 		String activeProject_binName = "sub_add_alternation";

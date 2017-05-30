@@ -115,40 +115,34 @@
          <toolbar
                id="de.uniluebeck.isp.Tessla.ui.toolbars.tesslaToolbar">
             <command
-                  commandId="de.uniluebeck.isp.Tessla.ui.commands.sampleCommand"
-                  icon="icons/sample.gif"
-                  tooltip="Say hello world"
-                  id="de.uniluebeck.isp.Tessla.ui.toolbars.sampleCommand">
-            </command>
-            <command
                   commandId="de.uniluebeck.isp.Tessla.ui.commands.runCommand"
-                  icon="icons/run.gif"
+                  icon="icons/run-c.png"
                   tooltip="Run"
                   id="de.uniluebeck.isp.Tessla.ui.toolbars.runCommand">
             </command>
             <command
                   commandId="de.uniluebeck.isp.Tessla.ui.commands.buildCommand"
-                  icon="icons/run.gif"
+                  icon="icons/build-c.png"
                   tooltip="Build"
                   id="de.uniluebeck.isp.Tessla.ui.toolbars.buildCommand">
             </command>            
             <command
                   commandId="de.uniluebeck.isp.Tessla.ui.commands.buildAndRunCommand"
-                  icon="icons/run_and_build.gif"
+                  icon="icons/build-and-run-c.png"
                   style="push"
                   tooltip="Build and Run"
                   id="de.uniluebeck.isp.Tessla.ui.toolbars.buildAndRunCommand">
             </command>
             <command
                   commandId="de.uniluebeck.isp.Tessla.ui.commands.buildAndRunAndAnalyzeCommand"
-                  icon="icons/run_and_build.gif"
+                  icon="icons/build-and-run-project.png"
                   style="push"
                   tooltip="Build and Run and Analyze"
                   id="de.uniluebeck.isp.Tessla.ui.toolbars.buildAndRunAndAnalyzeCommand">
             </command> 
             <command
                   commandId="de.uniluebeck.isp.Tessla.ui.commands.stopCommand"
-                  icon="icons/run.gif"
+                  icon="icons/stop-process.png"
                   tooltip="Stop"
                   id="de.uniluebeck.isp.Tessla.ui.toolbars.stopCommand">
             </command>                                         

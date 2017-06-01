@@ -147,7 +147,7 @@ public class BuildAndRunHandler extends AbstractHandler {
 
 		// Exec command inside running container with attached STDOUT and STDERR
 //		final String[] command = {"bash", "-c", "ls"};
-		String[] command = getBuildCCodeArgs();
+		String[] command = getPatchAssemblyArgs();
 		final ExecCreation execCreation = docker.execCreate(
 		    id, command, DockerClient.ExecCreateParam.attachStdout(),
 		    DockerClient.ExecCreateParam.attachStderr());
@@ -171,7 +171,10 @@ public class BuildAndRunHandler extends AbstractHandler {
 
 	}
 
-	private String[] getBuildCCodeArgs() {
+	private String[] getPatchAssemblyArgs() {
+//	    const projPath  = this.activeProject.projPath
+//	    const binName   = this.activeProject.binName
+//	    const outputDir = this.activeProject.outputDir
 		boolean buildAssembly = true;
 		String activeProject_projPath = "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/";
 		String activeProject_binName = "sub_add_alternation";
@@ -181,14 +184,41 @@ public class BuildAndRunHandler extends AbstractHandler {
 		activeProject_projPath = "usr/geteilt/";
 		outFile = "usr/geteilt/foo";
 		
+		//-----
+	    // fetch all tessla files from project directory
+//	    let args = [
+//	      'exec',
+//	      'tessla',
+//	      '/usr/lib/llvm-3.8/bin/opt',
+//	      '-load',
+//	      '/InstrumentFunctions/libInstrumentFunctions.so',
+//	      '-instrument_function_calls',
+//	      path.join('build', binName + '.bc')
+//	    ]
+//
+//	    TeSSLaFileManager.collectCFunctionsFromSourceFile({
+//	      sourceFile:  this.activeProject.tesslaFiles[0],
+//	      projectPath: this.activeProject.projPath
+//	    }).forEach(function(value, index, array) {
+//	      args = args.concat(['-instrument', value])
+//	    })
+//
+//	    // create command and args
+//	    args = args.concat(['-o', 'build/instrumented_' + binName + '.bc'])		
+		//-----
+		
+		
+		
 		List<String> args = new ArrayList<String>();
-		//TODO exec und tessla war noch angegeben:
-		// args.addAll(Arrays.asList("exec", "tessla", "clang", "-o", outFile));
-		args.addAll(Arrays.asList("clang", "-o", outFile));
+	    String builded = "build" + activeProject_binName + ".bc";  	    		
+		args.addAll(Arrays.asList("/usr/lib/llvm-3.8/bin/opt", "-load", "/InstrumentFunctions/libInstrumentFunctions.so", "-instrument_function_calls", builded));
 
-		if (buildAssembly) {
-			args.addAll(Arrays.asList("-emit-llvm", "-S"));
-		}
+//	    TeSSLaFileManager.collectCFunctionsFromSourceFile({
+//	      sourceFile:  this.activeProject.tesslaFiles[0],
+//	      projectPath: this.activeProject.projPath
+//	    }).forEach(function(value, index, array) {
+//	      args = args.concat(['-instrument', value])
+//	    })
 
 		// put c files into args array
 		// args = args.concat(this.activeProject.cFiles.map((arg) => {

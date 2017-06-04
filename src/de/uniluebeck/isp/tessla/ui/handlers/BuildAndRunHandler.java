@@ -31,6 +31,9 @@ import com.spotify.docker.client.messages.ExecCreation;
 import com.spotify.docker.client.messages.HostConfig;
 import com.spotify.docker.client.messages.PortBinding;
 
+import de.uniluebeck.isp.tessla.model.TeSSLaProject;
+import de.uniluebeck.isp.tessla.util.TeSSLaFileManager;
+
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
  * @see org.eclipse.core.commands.IHandler
@@ -38,8 +41,15 @@ import com.spotify.docker.client.messages.PortBinding;
  */
 public class BuildAndRunHandler extends AbstractHandler {
 
+	private final static String PROJECT_PATH = "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/dummyProjectPath/sub_add_alternation";
+	private final static String OUTPUT_DIR = "";
+	private final static String BIN_NAME = "";
+	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
+		
+		TeSSLaProject activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
+		
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 //		MessageDialog.openInformation(
 //				window.getShell(),
@@ -211,14 +221,26 @@ public class BuildAndRunHandler extends AbstractHandler {
 		
 		List<String> args = new ArrayList<String>();
 	    String builded = "build" + activeProject_binName + ".bc";  	    		
-		args.addAll(Arrays.asList("/usr/lib/llvm-3.8/bin/opt", "-load", "/InstrumentFunctions/libInstrumentFunctions.so", "-instrument_function_calls", builded));
+		args.addAll(
+				Arrays.asList("/usr/lib/llvm-3.8/bin/opt", "-load", "/InstrumentFunctions/libInstrumentFunctions.so", "-instrument_function_calls", builded));
 
-//	    TeSSLaFileManager.collectCFunctionsFromSourceFile({
 //	      sourceFile:  this.activeProject.tesslaFiles[0],
 //	      projectPath: this.activeProject.projPath
-//	    }).forEach(function(value, index, array) {
-//	      args = args.concat(['-instrument', value])
-//	    })
+		String sourceFile = "";
+		String projectPath = "";
+		
+		TeSSLaFileManager teSSLaFileManager = new TeSSLaFileManager();
+		try {
+			List<String> cFunctions = teSSLaFileManager.collectCFunctionsFromSourceFile(sourceFile, projectPath);
+			for (String function : cFunctions) {
+//				args = args.concat(['-instrument', value])
+				args.add("-instrument " + function);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 
 		// put c files into args array
 		// args = args.concat(this.activeProject.cFiles.map((arg) => {

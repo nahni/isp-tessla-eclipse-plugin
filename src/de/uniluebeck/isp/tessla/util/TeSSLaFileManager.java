@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.FilenameUtils;
 
+
 public class TeSSLaFileManager {
 
 	public static void main(String[] args) {
@@ -35,6 +36,7 @@ public class TeSSLaFileManager {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	public List<String> collectCFunctionsFromSourceFile(String sourceFile, String projectPath) throws IOException {
 	    // get function names
@@ -144,4 +146,5 @@ public class TeSSLaFileManager {
 		}
         
     }
+
 }

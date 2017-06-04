@@ -45,10 +45,12 @@ public class BuildAndRunHandler extends AbstractHandler {
 	private final static String OUTPUT_DIR = "";
 	private final static String BIN_NAME = "";
 	
+	TeSSLaProject activeProject;
+	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
-		TeSSLaProject activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
+		activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
 		
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 //		MessageDialog.openInformation(
@@ -226,8 +228,8 @@ public class BuildAndRunHandler extends AbstractHandler {
 
 //	      sourceFile:  this.activeProject.tesslaFiles[0],
 //	      projectPath: this.activeProject.projPath
-		String sourceFile = "";
-		String projectPath = "";
+		String sourceFile = activeProject.getTeSSLaFiles().get(0).getAbsolutePath();
+		String projectPath = activeProject.getProjectPath();
 		
 		TeSSLaFileManager teSSLaFileManager = new TeSSLaFileManager();
 		try {
@@ -247,8 +249,14 @@ public class BuildAndRunHandler extends AbstractHandler {
 		// return path.relative(this.activeProject.projPath, arg).replace(/\\/g,
 		// '/')
 		// }))
-		args.add(activeProject_projPath + "foo.c");
+		args.add(projectPath + "/foo.c");
 
+		String command = "";
+		for (String string : args) {
+			command = command + " " + string;
+		}
+		System.out.println(command);
+		
 		String[] argsArray = new String[args.size()];
 		argsArray = args.toArray(argsArray);
 

@@ -1,4 +1,4 @@
-package de.uniluebeck.isp.tessla.ui.handlers;
+package de.uniluebeck.isp.tessla.ui.services;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -12,16 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.handlers.HandlerUtil;
-
 import com.spotify.docker.client.DefaultDockerClient;
-import com.spotify.docker.client.DefaultDockerClient.Builder;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.LogStream;
+import com.spotify.docker.client.DefaultDockerClient.Builder;
 import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.ContainerConfig;
@@ -34,12 +28,7 @@ import com.spotify.docker.client.messages.PortBinding;
 import de.uniluebeck.isp.tessla.model.TeSSLaProject;
 import de.uniluebeck.isp.tessla.util.TeSSLaFileManager;
 
-/**
- * Our sample handler extends AbstractHandler, an IHandler base class.
- * @see org.eclipse.core.commands.IHandler
- * @see org.eclipse.core.commands.AbstractHandler
- */
-public class BuildAndRunHandler extends AbstractHandler {
+public class BuildAssemblyService {
 
 //	private final static String PROJECT_PATH = "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/dummyProjectPath/sub_add_alternation";
 	private final static String PROJECT_PATH = "/home/annika/geteilt/dummyProjectPath/sub_add_alternation";
@@ -49,29 +38,8 @@ public class BuildAndRunHandler extends AbstractHandler {
 	
 	TeSSLaProject activeProject;
 	
-	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
+	public void start(){
 		activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
-		
-		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-//		MessageDialog.openInformation(
-//				window.getShell(),
-//				"Ui",
-//				"Build And Run");
-		
-		//Versuch 1
-//		try {
-////			Process p = Runtime.getRuntime().exec("docker images");
-//			Process p = Runtime.getRuntime().exec("docker load -i C:/Users/lenovo/Downloads/Atom/tessla");
-//			
-//			InputStream errors = p.getErrorStream();
-//			
-//			System.out.println("fertig");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			System.out.println("Exc");
-//		}
 		
 		try {
 			startDocker();
@@ -91,8 +59,6 @@ public class BuildAndRunHandler extends AbstractHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return null;
 	}
 	
 	public void startDocker() throws DockerCertificateException, FileNotFoundException, IOException, DockerException, InterruptedException {

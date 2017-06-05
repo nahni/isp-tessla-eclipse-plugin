@@ -1,4 +1,4 @@
-package de.uniluebeck.isp.tessla.ui.handlers;
+package de.uniluebeck.isp.tessla.ui.services;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -12,16 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.handlers.HandlerUtil;
-
 import com.spotify.docker.client.DefaultDockerClient;
-import com.spotify.docker.client.DefaultDockerClient.Builder;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.LogStream;
+import com.spotify.docker.client.DefaultDockerClient.Builder;
 import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.ContainerConfig;
@@ -34,12 +28,7 @@ import com.spotify.docker.client.messages.PortBinding;
 import de.uniluebeck.isp.tessla.model.TeSSLaProject;
 import de.uniluebeck.isp.tessla.util.TeSSLaFileManager;
 
-/**
- * Our sample handler extends AbstractHandler, an IHandler base class.
- * @see org.eclipse.core.commands.IHandler
- * @see org.eclipse.core.commands.AbstractHandler
- */
-public class BuildAndRunHandler extends AbstractHandler {
+public class PatchAssemblyService {
 
 //	private final static String PROJECT_PATH = "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/dummyProjectPath/sub_add_alternation";
 	private final static String PROJECT_PATH = "/home/annika/geteilt/dummyProjectPath/sub_add_alternation";
@@ -49,29 +38,8 @@ public class BuildAndRunHandler extends AbstractHandler {
 	
 	TeSSLaProject activeProject;
 	
-	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
+	public void start(){
 		activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
-		
-		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-//		MessageDialog.openInformation(
-//				window.getShell(),
-//				"Ui",
-//				"Build And Run");
-		
-		//Versuch 1
-//		try {
-////			Process p = Runtime.getRuntime().exec("docker images");
-//			Process p = Runtime.getRuntime().exec("docker load -i C:/Users/lenovo/Downloads/Atom/tessla");
-//			
-//			InputStream errors = p.getErrorStream();
-//			
-//			System.out.println("fertig");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			System.out.println("Exc");
-//		}
 		
 		try {
 			startDocker();
@@ -91,8 +59,6 @@ public class BuildAndRunHandler extends AbstractHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return null;
 	}
 	
 	public void startDocker() throws DockerCertificateException, FileNotFoundException, IOException, DockerException, InterruptedException {
@@ -162,7 +128,7 @@ public class BuildAndRunHandler extends AbstractHandler {
 
 		// Exec command inside running container with attached STDOUT and STDERR
 //		final String[] command = {"bash", "-c", "ls"};
-		String[] command = getBuildAssemblyArgs();
+		String[] command = getPatchAssemblyArgs();
 		final ExecCreation execCreation = docker.execCreate(
 		    id, command, DockerClient.ExecCreateParam.attachStdout(),
 		    DockerClient.ExecCreateParam.attachStderr());
@@ -186,41 +152,85 @@ public class BuildAndRunHandler extends AbstractHandler {
 
 	}
 
-	private String[] getBuildAssemblyArgs() {
+	private String[] getPatchAssemblyArgs() {
+//	    const projPath  = this.activeProject.projPath
+//	    const binName   = this.activeProject.binName
+//	    const outputDir = this.activeProject.outputDir
+		boolean buildAssembly = true;
+		String activeProject_projPath = "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/";
+		String activeProject_binName = "sub_add_alternation";
+		String outFile = "build/" + activeProject_binName + (buildAssembly ? ".bc" : "");
+		
+		//TODO rausnehmen
+		activeProject_projPath = "usr/geteilt/";
+		outFile = "usr/geteilt/foo";
+		
+		//-----
+	    // fetch all tessla files from project directory
+//	    let args = [
+//	      'exec',
+//	      'tessla',
+//	      '/usr/lib/llvm-3.8/bin/opt',
+//	      '-load',
+//	      '/InstrumentFunctions/libInstrumentFunctions.so',
+//	      '-instrument_function_calls',
+//	      path.join('build', binName + '.bc')
+//	    ]
+//
+//	    TeSSLaFileManager.collectCFunctionsFromSourceFile({
+//	      sourceFile:  this.activeProject.tesslaFiles[0],
+//	      projectPath: this.activeProject.projPath
+//	    }).forEach(function(value, index, array) {
+//	      args = args.concat(['-instrument', value])
+//	    })
+//
+//	    // create command and args
+//	    args = args.concat(['-o', 'build/instrumented_' + binName + '.bc'])		
+		//-----
+		
+		
+		
+		List<String> args = new ArrayList<String>();
+	    String builded = "build" + activeProject_binName + ".bc";  	    		
+		args.addAll(
+				Arrays.asList("/usr/lib/llvm-3.8/bin/opt", "-load", "/InstrumentFunctions/libInstrumentFunctions.so", "-instrument_function_calls ", builded));
 
-        String activeProject_binName = "sub_add_alternation";
-        
-//        const args = [
-//                      'exec',
-//                      'tessla',
-//                      'clang++',
-//                      path.join('build', 'instrumented_' + this.activeProject.binName + '.bc'),
-//                      '-o',
-//                      'build/instrumented_' + this.activeProject.binName,
-//                      '-lzlog',
-//                      '-lpthread',
-//                      '-L/usr/local/lib',
-//                      '-L/InstrumentFunctions',
-//                      '-lLogger'
-//                    ]
-                            
-        // check if the tessla docker container is still running
-//        this.checkDocker()                       
+//	      sourceFile:  this.activeProject.tesslaFiles[0],
+//	      projectPath: this.activeProject.projPath
+		String sourceFile = activeProject.getTeSSLaFiles().get(0).getAbsolutePath();
+		String projectPath = activeProject.getProjectPath();
+		
+		TeSSLaFileManager teSSLaFileManager = new TeSSLaFileManager();
+		try {
+			List<String> cFunctions = teSSLaFileManager.collectCFunctionsFromSourceFile(sourceFile, projectPath);
+			for (String function : cFunctions) {
+//				args = args.concat(['-instrument', value])
+				args.add("-instrument " + function);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-        List<String> args = new ArrayList<String>();
-        args.addAll(Arrays.asList("clang++", "instrumented_" + this.activeProject.getBinName() + ".bc", "-o",
-                "build/instrumented_" + this.activeProject.getBinName(), "-lzlog", "-lpthread", "-L/usr/local/lib",
-                "-L/InstrumentFunctions", "-lLogger"));
 
-        String command = "";
-        for (String string : args) {
-            command = command + " " + string;
-        }
-        System.out.println(command);
-        
-        String[] argsArray = new String[args.size()];
-        argsArray = args.toArray(argsArray);
+		// put c files into args array
+		// args = args.concat(this.activeProject.cFiles.map((arg) => {
+		// return path.relative(this.activeProject.projPath, arg).replace(/\\/g,
+		// '/')
+		// }))
+		args.add(projectPath + "/foo.c");
 
-        return argsArray;
+		String command = "";
+		for (String string : args) {
+			command = command + " " + string;
+		}
+		
+		///usr/lib/llvm-3.8/bin/opt -load /InstrumentFunctions/libInstrumentFunctions.so -instrument_function_calls  buildsub_add_alternation.bc -instrument add -instrument sub /home/annika/geteilt/dummyProjectPath/sub_add_alternation/foo.c
+		System.out.println("Args: " + command);
+		
+		String[] argsArray = new String[args.size()];
+		argsArray = args.toArray(argsArray);
+
+		return argsArray;
 	}
 }

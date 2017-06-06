@@ -42,7 +42,9 @@ Bundle-ClassPath: lib/commons-lang-2.6.jar,
  lib/jnr-posix-3.0.12.jar,
  lib/jnr-unixsocket-0.8.jar,
  lib/jffi-1.2.9-native.jar,
- lib/jffi-1.2.9.jar
+ lib/jffi-1.2.9.jar,
+ lib/commons-collections4-4.1.jar,
+ lib/json-simple-1.1.1.jar
 Bundle-Activator: de.uniluebeck.isp.tessla.ui.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

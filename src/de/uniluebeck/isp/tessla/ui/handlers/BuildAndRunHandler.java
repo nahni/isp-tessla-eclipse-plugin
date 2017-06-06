@@ -32,6 +32,10 @@ import com.spotify.docker.client.messages.HostConfig;
 import com.spotify.docker.client.messages.PortBinding;
 
 import de.uniluebeck.isp.tessla.model.TeSSLaProject;
+import de.uniluebeck.isp.tessla.ui.services.AssemblyService;
+import de.uniluebeck.isp.tessla.ui.services.CCodeBuildService;
+import de.uniluebeck.isp.tessla.ui.services.PatchedBinaryService;
+import de.uniluebeck.isp.tessla.ui.services.TeSSLaService;
 import de.uniluebeck.isp.tessla.util.TeSSLaFileManager;
 
 /**
@@ -74,7 +78,7 @@ public class BuildAndRunHandler extends AbstractHandler {
 //		}
 		
 		try {
-			startDocker();
+			onCompileAndRunProject();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -95,7 +99,7 @@ public class BuildAndRunHandler extends AbstractHandler {
 		return null;
 	}
 	
-	public void startDocker() throws DockerCertificateException, FileNotFoundException, IOException, DockerException, InterruptedException {
+	public void startDocker(String[] command ) throws DockerCertificateException, FileNotFoundException, IOException, DockerException, InterruptedException {
 		Builder builder = DefaultDockerClient.fromEnv();
 		builder.connectTimeoutMillis(60000);
 		builder.readTimeoutMillis(60000);
@@ -162,7 +166,7 @@ public class BuildAndRunHandler extends AbstractHandler {
 
 		// Exec command inside running container with attached STDOUT and STDERR
 //		final String[] command = {"bash", "-c", "ls"};
-		String[] command = getBuildAssemblyArgs();
+//		String[] command = getBuildAssemblyArgs();
 		final ExecCreation execCreation = docker.execCreate(
 		    id, command, DockerClient.ExecCreateParam.attachStdout(),
 		    DockerClient.ExecCreateParam.attachStderr());
@@ -183,44 +187,55 @@ public class BuildAndRunHandler extends AbstractHandler {
 
 		// Close the docker client
 		docker.close();
+		
+		System.out.println("Container closed");
 
 	}
 
-	private String[] getBuildAssemblyArgs() {
+	private void onCompileAndRunProject() throws FileNotFoundException, DockerCertificateException, IOException, DockerException, InterruptedException {
 
-        String activeProject_binName = "sub_add_alternation";
-        
-//        const args = [
-//                      'exec',
-//                      'tessla',
-//                      'clang++',
-//                      path.join('build', 'instrumented_' + this.activeProject.binName + '.bc'),
-//                      '-o',
-//                      'build/instrumented_' + this.activeProject.binName,
-//                      '-lzlog',
-//                      '-lpthread',
-//                      '-L/usr/local/lib',
-//                      '-L/InstrumentFunctions',
-//                      '-lLogger'
-//                    ]
-                            
-        // check if the tessla docker container is still running
-//        this.checkDocker()                       
-
-        List<String> args = new ArrayList<String>();
-        args.addAll(Arrays.asList("clang++", "instrumented_" + this.activeProject.getBinName() + ".bc", "-o",
-                "build/instrumented_" + this.activeProject.getBinName(), "-lzlog", "-lpthread", "-L/usr/local/lib",
-                "-L/InstrumentFunctions", "-lLogger"));
-
-        String command = "";
-        for (String string : args) {
-            command = command + " " + string;
-        }
-        System.out.println(command);
-        
-        String[] argsArray = new String[args.size()];
-        argsArray = args.toArray(argsArray);
-
-        return argsArray;
+//	    // start compilation process
+//	    this.onBuildCCode({                               // First compile C code into Assembly
+//	      onSuccess: () => this.onPatchAssembly({         // then patch Assembly
+//	        onSuccess: () => this.onBuildAssembly({       // compile patched Assembly
+//	          onSuccess: () => this.onRunPatchedBinary({  // run patched binary
+//	            onSuccess: () => this.onBuildTeSSLa({     // build TeSSLa code
+//	              onSuccess: () => this.onRunTeSSLa({
+//	                onSuccess: (lines) => {
+//	                  //console.log(startTime)
+//	                  // emit signal that components can update with correct output values
+//	                  this.emitter.emit('format-tessla-output', {output: lines})
+//	                }
+//	              }),  // run TeSSLa server
+//	              onError: this.viewMgr.highlightTeSSLaError
+//	            })
+//	          })
+//	        })
+//	      }),
+//	      buildAssembly: true
+//	    })		
+		
+		CCodeBuildService cCodeBuilder = new CCodeBuildService();
+		String[] cCodeArgs = cCodeBuilder.getBuildCCodeArgs();
+		startDocker(cCodeArgs);
+		
+		AssemblyService assemblyService = new AssemblyService();
+		String[] patchAssemblyArgs = assemblyService.getPatchAssemblyArgs();
+		startDocker(patchAssemblyArgs);
+		
+		String[] buildAssemblyArgs = assemblyService.getBuildAssemblyArgs();
+		startDocker(buildAssemblyArgs);
+		
+		PatchedBinaryService patchedBinaryService = new PatchedBinaryService();
+		String[] runPatchedBinaryArgs = patchedBinaryService.getRunPatchedBinaryArgs();
+		startDocker(runPatchedBinaryArgs);
+		
+		TeSSLaService teSSLaService = new TeSSLaService();
+		String[] buildTeSSLaArgs = teSSLaService.getBuildTeSSLaArgs();
+		startDocker(buildTeSSLaArgs);
+		
+		String[] runTeSSLaArgs = teSSLaService.getRunTeSSLaArgs();
+		startDocker(runTeSSLaArgs);
+		
 	}
 }

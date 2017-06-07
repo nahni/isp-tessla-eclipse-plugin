@@ -1,8 +1,11 @@
 package de.uniluebeck.isp.tessla.ui.services;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.collections4.CollectionUtils;
 
 import de.uniluebeck.isp.tessla.model.TeSSLaProject;
 
@@ -23,13 +26,14 @@ public class CCodeBuildService {
 
 	public String[] getBuildCCodeArgs() {
 		boolean buildAssembly = true;
-		String activeProject_projPath = "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/";
-		String activeProject_binName = "sub_add_alternation";
-		String outFile = "build/" + activeProject_binName + (buildAssembly ? ".bc" : "");
+//		String activeProject_projPath = "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/";
+//		String activeProject_binName = "sub_add_alternation";
+		String binName = activeProject.getBinName();
+		String outFile = "build/" + binName + (buildAssembly ? ".bc" : "");
 
 		// TODO rausnehmen
-		activeProject_projPath = "usr/geteilt/";
-		outFile = "usr/geteilt/foo";
+		String activeProject_projPath = "usr/geteilt/";
+//		outFile = "usr/geteilt/foo";
 
 		List<String> args = new ArrayList<String>();
 		// TODO exec und tessla war noch angegeben:
@@ -45,8 +49,21 @@ public class CCodeBuildService {
 		// return path.relative(this.activeProject.projPath, arg).replace(/\\/g,
 		// '/')
 		// }))
+		//TODO
+//		List<File> cFiles = activeProject.getCFiles();
+//		if(CollectionUtils.isNotEmpty(cFiles)){
+//			for (File file : cFiles) {
+//				args.add(file.getPath());
+//			}
+//		}
 		args.add(activeProject_projPath + "foo.c");
 
+        String command = "";
+        for (String string : args) {
+            command = command + " " + string;
+        }
+        System.out.println("getBuildCCodeArgs: " + command);
+		
 		String[] argsArray = new String[args.size()];
 		argsArray = args.toArray(argsArray);
 

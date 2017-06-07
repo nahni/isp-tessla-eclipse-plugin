@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import de.uniluebeck.isp.tessla.util.FileFilter;
 
 public class TeSSLaProject {
@@ -56,8 +58,28 @@ public class TeSSLaProject {
 		this.outputDir = outputDir;
 	}
 	
+	/**
+	 * der BinName ist einfach der Orndername des Projekts
+	 * @return
+	 */
 	public String getBinName() {
-		return binName;
+		if(StringUtils.isBlank(binName)){
+//      The path.basename() methods returns the last portion of a path, similar to the Unix basename command.
+//      For example:
+//      path.basename('/foo/bar/baz/asdf/quux.html');
+//      Returns: 'quux.html'
+//    this.binName = path.basename(this.projPath).replace(' ', '_')
+			String project = this.projectPath;
+			if(project.endsWith("/")){
+				project = project.substring(0, project.length() - 1);
+			}
+			
+			project = project.substring(project.lastIndexOf("/")+1);
+			
+			this.binName = project;
+		}
+		
+		return this.binName;
 	}
 	
 	public void setBinName(String binName) {

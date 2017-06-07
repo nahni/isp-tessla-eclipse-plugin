@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,6 @@ import de.uniluebeck.isp.tessla.ui.services.AssemblyService;
 import de.uniluebeck.isp.tessla.ui.services.CCodeBuildService;
 import de.uniluebeck.isp.tessla.ui.services.PatchedBinaryService;
 import de.uniluebeck.isp.tessla.ui.services.TeSSLaService;
-import de.uniluebeck.isp.tessla.util.TeSSLaFileManager;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -76,30 +74,37 @@ public class BuildAndRunHandler extends AbstractHandler {
 //			e.printStackTrace();
 //			System.out.println("Exc");
 //		}
-		
+		System.out.println("BuildAndRunHandler");
 		try {
 			onCompileAndRunProject();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("Catch 1");
 		} catch (DockerCertificateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("Catch 2");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("Catch 3");
 		} catch (DockerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("Catch 4");
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("Catch 5");
 		}
 		
 		return null;
 	}
 	
 	public void startDocker(String[] command ) throws DockerCertificateException, FileNotFoundException, IOException, DockerException, InterruptedException {
+		System.out.println("startDocker");
+		
 		Builder builder = DefaultDockerClient.fromEnv();
 		builder.connectTimeoutMillis(60000);
 		builder.readTimeoutMillis(60000);
@@ -173,9 +178,9 @@ public class BuildAndRunHandler extends AbstractHandler {
 		
 		
 		final LogStream output = docker.execStart(execCreation.id());
-		final String execOutput = output.readFully();
-
-		System.out.println("execOutput: " + execOutput);
+		//Caused by: java.lang.RuntimeException: java.io.IOException: Die Verbindung wurde vom Kommunikationspartner zurückgesetzt
+//		final String execOutput = output.readFully();
+//		System.out.println("execOutput: " + execOutput);
 		
 		// Kill container
 		docker.killContainer(id);
@@ -215,25 +220,31 @@ public class BuildAndRunHandler extends AbstractHandler {
 //	      buildAssembly: true
 //	    })		
 		
+		System.out.println("onBuildCCode");
 		CCodeBuildService cCodeBuilder = new CCodeBuildService();
 		String[] cCodeArgs = cCodeBuilder.getBuildCCodeArgs();
 		startDocker(cCodeArgs);
 		
+		System.out.println("onPatchAssembly");
 		AssemblyService assemblyService = new AssemblyService();
 		String[] patchAssemblyArgs = assemblyService.getPatchAssemblyArgs();
 		startDocker(patchAssemblyArgs);
 		
+		System.out.println("onBuildAssembly");
 		String[] buildAssemblyArgs = assemblyService.getBuildAssemblyArgs();
 		startDocker(buildAssemblyArgs);
 		
+		System.out.println("RunPatchedBinary");
 		PatchedBinaryService patchedBinaryService = new PatchedBinaryService();
 		String[] runPatchedBinaryArgs = patchedBinaryService.getRunPatchedBinaryArgs();
 		startDocker(runPatchedBinaryArgs);
 		
+		System.out.println("BuildTeSSLa");
 		TeSSLaService teSSLaService = new TeSSLaService();
 		String[] buildTeSSLaArgs = teSSLaService.getBuildTeSSLaArgs();
 		startDocker(buildTeSSLaArgs);
 		
+		System.out.println("RunTeSSLa");
 		String[] runTeSSLaArgs = teSSLaService.getRunTeSSLaArgs();
 		startDocker(runTeSSLaArgs);
 		

@@ -56,7 +56,7 @@ public class PatchedBinaryService {
         for (String string : args) {
             command = command + " " + string;
         }
-        System.out.println(command);
+        System.out.println("getRunPatchedBinaryArgs: " + command);
         
         String[] argsArray = new String[args.size()];
         argsArray = args.toArray(argsArray);

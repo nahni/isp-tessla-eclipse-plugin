@@ -60,7 +60,7 @@ public class AssemblyService {
 		
 		
 		List<String> args = new ArrayList<String>();
-	    String builded = "build" + activeProject_binName + ".bc";  	    		
+	    String builded = "build/" + activeProject_binName + ".bc";  	    		
 		args.addAll(
 				Arrays.asList("/usr/lib/llvm-3.8/bin/opt", "-load", "/InstrumentFunctions/libInstrumentFunctions.so", "-instrument_function_calls ", builded));
 
@@ -82,20 +82,25 @@ public class AssemblyService {
 		}
 
 
+		//Ka wo das her kommt. Gehoert eig glaube ich nicht hierhin
 		// put c files into args array
 		// args = args.concat(this.activeProject.cFiles.map((arg) => {
 		// return path.relative(this.activeProject.projPath, arg).replace(/\\/g,
 		// '/')
 		// }))
-		args.add(projectPath + "/foo.c");
+//		args.add(projectPath + "/foo.c");
 
+		String binName = activeProject.getBinName();
+//		  args = args.concat(['-o', 'build/instrumented_' + binName + '.bc'])
+		args.addAll(Arrays.asList("-o", "build/instrumented/" + binName + ".bc"));
+		
 		String command = "";
 		for (String string : args) {
 			command = command + " " + string;
 		}
 		
 		///usr/lib/llvm-3.8/bin/opt -load /InstrumentFunctions/libInstrumentFunctions.so -instrument_function_calls  buildsub_add_alternation.bc -instrument add -instrument sub /home/annika/geteilt/dummyProjectPath/sub_add_alternation/foo.c
-		System.out.println("Args: " + command);
+		System.out.println("getPatchAssemblyArgs: " + command);
 		
 		String[] argsArray = new String[args.size()];
 		argsArray = args.toArray(argsArray);
@@ -125,7 +130,7 @@ public class AssemblyService {
 //        this.checkDocker()                       
 
         List<String> args = new ArrayList<String>();
-        args.addAll(Arrays.asList("clang++", "instrumented_" + this.activeProject.getBinName() + ".bc", "-o",
+        args.addAll(Arrays.asList("clang++", "build/instrumented_" + this.activeProject.getBinName() + ".bc", "-o",
                 "build/instrumented_" + this.activeProject.getBinName(), "-lzlog", "-lpthread", "-L/usr/local/lib",
                 "-L/InstrumentFunctions", "-lLogger"));
 
@@ -133,7 +138,7 @@ public class AssemblyService {
         for (String string : args) {
             command = command + " " + string;
         }
-        System.out.println(command);
+        System.out.println("getBuildAssemblyArgs: " + command);
         
         String[] argsArray = new String[args.size()];
         argsArray = args.toArray(argsArray);

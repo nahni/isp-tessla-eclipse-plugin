@@ -32,5 +32,14 @@ public class TeSSLaProjectTest {
 		assertEquals(1, result.size());
 		assertEquals("spec.tessla", result.get(0).getName());
 	}
-
+	
+	@Test
+	public void getBinName_test() {
+		String sampleProjectPath = TestingUtil.getProjectPathToSampleProject();
+		
+		TeSSLaProject teSSLaProject = new TeSSLaProject(sampleProjectPath, null, null);
+		String reuslt = teSSLaProject.getBinName();
+		
+		assertEquals("sub_add_alternation", reuslt);
+	}
 }

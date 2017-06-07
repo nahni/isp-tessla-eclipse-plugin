@@ -129,7 +129,7 @@ public class TeSSLaService {
         for (String string : args) {
             command = command + " " + string;
         }
-        System.out.println(command);
+        System.out.println("getRunTeSSLaArgs: " + command);
         
         String[] argsArray = new String[args.size()];
         argsArray = args.toArray(argsArray);
@@ -178,7 +178,7 @@ public class TeSSLaService {
         for (String string : args) {
             command = command + " " + string;
         }
-        System.out.println(command);
+        System.out.println("getBuildTeSSLaArgs: " + command);
         
         String[] argsArray = new String[args.size()];
         argsArray = args.toArray(argsArray);

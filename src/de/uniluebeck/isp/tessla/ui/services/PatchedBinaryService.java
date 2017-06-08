@@ -29,6 +29,7 @@ public class PatchedBinaryService {
 	public String[] getRunPatchedBinaryArgs() {
 		//The os.homedir() method returns the home directory of the current user as a string.
 //		this.containerDir   = path.join(os.homedir(), '.tessla-env')
+		//containerDir sollte /home/annika/.tessla-env sein
 		String containerDir = System.getProperty("user.home") + ".tessla-env";
 		
 		String traceFilePath = containerDir + "instrumented_" + this.activeProject.getBinName() + ".trace";
@@ -50,7 +51,7 @@ public class PatchedBinaryService {
 //	    const args = ['exec', 'tessla', './build/instrumented_' + this.activeProject.binName]
 
 	    List<String> args = new ArrayList<String>();
-	    args.addAll(Arrays.asList("./build/instrumented_" + this.activeProject.getBinName()));
+	    args.addAll(Arrays.asList("./build/instrumented/" + this.activeProject.getBinName()));
 	    		
         String command = "";
         for (String string : args) {

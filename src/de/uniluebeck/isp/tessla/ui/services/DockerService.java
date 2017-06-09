@@ -130,9 +130,9 @@ public class DockerService {
 		
 		
 		final LogStream output = docker.execStart(execCreation.id());
-		final String execOutput = output.readFully();
-
-		System.out.println("execOutput: " + execOutput);
+//		final String execOutput = output.readFully();
+//
+//		System.out.println("execOutput: " + execOutput);
 		
 //		// Kill container
 //		docker.killContainer(id);

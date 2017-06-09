@@ -33,7 +33,7 @@ public class CCodeBuildService {
 
 		// TODO rausnehmen
 		String activeProject_projPath = "usr/geteilt/";
-//		outFile = "usr/geteilt/foo";
+		outFile = "usr/geteilt/foo";
 
 		List<String> args = new ArrayList<String>();
 		// TODO exec und tessla war noch angegeben:

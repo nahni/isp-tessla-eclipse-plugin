@@ -76,31 +76,31 @@ public class DockerService {
 //				.appendBinds("/local/path:/remote/path")
 //				.appendBinds("C:/Users/lenovo/SSEProjekt/shared:c:/src")
 //				.appendBinds("/Users/lenovo/SSEProjekt/shared:/src")
-//				.appendBinds("/home/annika/geteilt:/usr/geteilt")
+				.appendBinds("/home/annika/geteilt:/usr/geteilt")
+//				.appendBinds(host_dir + ":/tessla")
 				.build();
 
 //		docker.pull("busybox");
 		
-
-		// Create container with exposed ports
-//		final ContainerConfig containerConfig = ContainerConfig.builder()
-//		    .hostConfig(hostConfig)
-////		    .image("busybox").exposedPorts(ports)
-//		    .image("tessla").exposedPorts(ports)
-//		    //-rm
-//		    .cmd("sh", "-c", "while :; do sleep 1; done")
-////		    .cmd(args)
-//		    .build();
-
 		final ContainerConfig containerConfig = ContainerConfig.builder()
 			    .hostConfig(hostConfig)
-//			    .image("tessla").exposedPorts(ports)
+			    .image("tessla").exposedPorts(ports)
 			    //-rm
-			    .cmd("--volume", host_dir + ":/tessla", "-w", "/tessla", "-tid", "--name", "tessla", "tessla", "sh")
+//			    .cmd("--volume", host_dir + ":/tessla", "-w", "/tessla", "-tid", "--name", "tessla", "tessla", "sh")
+//			    .cmd("-w", "/tessla", "-tid", "--name", "tessla", "tessla", "sh")
+//			    .cmd("-tid", "--name", "tessla", "tessla", "sh")
+//			    .cmd("-tid", "tessla", "sh")
+			    .cmd("sh", "-c", "while :; do sleep 1; done")
+			    //wenn man die working dir setzt gehts iwie nicht mehr
+//			    .workingDir("/tessla")
 //			    .cmd(args)
 			    .build();
+	
 		
-		final ContainerCreation creation = docker.createContainer(containerConfig);
+
+		
+//		final ContainerCreation creation = docker.createContainer(containerConfig);
+		final ContainerCreation creation = docker.createContainer(containerConfig, "tessla");
 		final String id = creation.id();
 		this.containerId = id;
 		

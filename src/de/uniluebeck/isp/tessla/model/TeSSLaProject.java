@@ -85,4 +85,12 @@ public class TeSSLaProject {
 	public void setBinName(String binName) {
 		this.binName = binName;
 	}
+	
+	public String getContainerDir(){
+		//Das Eclipse muss im Moment als Admin gestratet werden, daher waere das ContainerDir
+		// root/.tessla zu Entwicklungszewecken hab ich das mal umgebogen
+//		return System.getProperty("user.home") + "/" + ".tessla-env";
+		
+		return "/home/annika/.tessla-env";
+	}
 }

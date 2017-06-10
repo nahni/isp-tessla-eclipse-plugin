@@ -25,13 +25,15 @@ import com.spotify.docker.client.messages.ExecCreation;
 import com.spotify.docker.client.messages.HostConfig;
 import com.spotify.docker.client.messages.PortBinding;
 
+import de.uniluebeck.isp.tessla.model.TeSSLaProject;
+
 public class DockerService {
 
 	private DockerClient docker;
 	
 	private String containerId = "";
 	
-	public void startDocker() throws DockerCertificateException, FileNotFoundException, IOException, DockerException, InterruptedException{
+	public void startDocker(TeSSLaProject activeProject) throws DockerCertificateException, FileNotFoundException, IOException, DockerException, InterruptedException{
 		//docker run --volume /home/annika/Entwicklung/Spielwiese/dummyProjectPath:/tessla -w /tessla -tid --name tessla tessla sh
 		
 		String host_dir = "/home/annika/Entwicklung/Spielwiese/dummyProjectPath";
@@ -73,10 +75,7 @@ public class DockerService {
 //		All other paths come from your virtual machine�s filesystem, so if you want to make some other host folder available for sharing, you need to do additional work.
 		final HostConfig hostConfig = HostConfig.builder()
 				.portBindings(portBindings)
-//				.appendBinds("/local/path:/remote/path")
-//				.appendBinds("C:/Users/lenovo/SSEProjekt/shared:c:/src")
-//				.appendBinds("/Users/lenovo/SSEProjekt/shared:/src")
-				.appendBinds("/home/annika/geteilt:/usr/geteilt")
+//				.appendBinds("/home/annika/geteilt:/usr/geteilt")
 //				.appendBinds(host_dir + ":/tessla")
 				.build();
 

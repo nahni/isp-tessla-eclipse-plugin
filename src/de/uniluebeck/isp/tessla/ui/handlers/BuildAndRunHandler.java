@@ -211,7 +211,7 @@ public class BuildAndRunHandler extends AbstractHandler {
 //	      buildAssembly: true
 //	    })		
 		
-		dockerSerivce.startDocker();
+		dockerSerivce.startDocker(activeProject);
 		
 		System.out.println("onBuildCCode");
 		CCodeBuildService cCodeBuilder = new CCodeBuildService();

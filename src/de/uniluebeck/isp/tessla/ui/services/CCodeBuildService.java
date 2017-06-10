@@ -13,7 +13,7 @@ public class CCodeBuildService {
 	// private final static String PROJECT_PATH = "C:/Annika/Studium/3
 	// Semester/SSE Projekt/TeSSLa Plugin/Dateien zum
 	// ausprobieren/dummyProjectPath/sub_add_alternation";
-	private final static String PROJECT_PATH = "/home/annika/geteilt/dummyProjectPath/sub_add_alternation";
+	private final static String PROJECT_PATH = "/home/annika/geteilt/dummyProjectPath2/sub_add_alternation";
 
 	private final static String OUTPUT_DIR = "";
 	private final static String BIN_NAME = "";
@@ -25,6 +25,12 @@ public class CCodeBuildService {
 	}
 
 	public String[] getBuildCCodeArgs() {
+		
+		//iwie sollte das wo anders hin oder die Methode umbeannt werden
+		WorkingDirFileService workingDirFileService = new WorkingDirFileService(activeProject);
+		workingDirFileService.createWorkingDir();
+		workingDirFileService.transferFilesToContainer();
+		
 		boolean buildAssembly = true;
 //		String activeProject_projPath = "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/";
 //		String activeProject_binName = "sub_add_alternation";

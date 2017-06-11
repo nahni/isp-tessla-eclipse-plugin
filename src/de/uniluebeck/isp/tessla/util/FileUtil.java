@@ -1,5 +1,7 @@
 package de.uniluebeck.isp.tessla.util;
 
+import java.io.File;
+
 import org.apache.commons.lang.StringUtils;
 
 public class FileUtil {
@@ -19,5 +21,14 @@ public class FileUtil {
 		path = path.substring(path.lastIndexOf("/")+1);
 		
 		return path;
+	}
+	
+	public static String getRelativePath(String from, String to){
+//		String path = "/var/data/stuff/xyz.dat";
+//		String base = "/var/data";
+//		String relative = new File(base).toURI().relativize(new File(path).toURI()).getPath();
+		String relative = new File(from).toURI().relativize(new File(to).toURI()).getPath();
+
+		return relative;
 	}
 }

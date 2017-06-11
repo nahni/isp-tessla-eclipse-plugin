@@ -1,5 +1,11 @@
 package de.uniluebeck.isp.tessla.ui.services;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import com.spotify.docker.client.exceptions.DockerCertificateException;
+import com.spotify.docker.client.exceptions.DockerException;
+
 import de.uniluebeck.isp.tessla.model.TeSSLaProject;
 
 public class Main {
@@ -11,10 +17,25 @@ public class Main {
 
 	TeSSLaProject activeProject;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException, DockerCertificateException, IOException, DockerException, InterruptedException {
 		Main main = new Main();
-		main.copyFiles();
+//		main.copyFiles();
+		main.buildCCode();
 
+	}
+	
+	public void buildCCode() throws FileNotFoundException, DockerCertificateException, IOException, DockerException, InterruptedException{
+		
+		activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
+		
+		DockerService dockerSerivce = new DockerService();
+		
+		dockerSerivce.startDocker(activeProject);
+		
+		System.out.println("onBuildCCode");
+		CCodeBuildService cCodeBuilder = new CCodeBuildService();
+		String[] cCodeArgs = cCodeBuilder.getBuildCCodeArgs();
+		dockerSerivce.runDockerCommand(cCodeArgs);
 	}
 	
 	public void copyFiles(){
@@ -25,5 +46,6 @@ public class Main {
 		workingDirFileService.createWorkingDir();
 		workingDirFileService.transferFilesToContainer();
 	}
+	
 
 }

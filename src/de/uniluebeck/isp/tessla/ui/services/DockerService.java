@@ -76,7 +76,7 @@ public class DockerService {
 		final HostConfig hostConfig = HostConfig.builder()
 				.portBindings(portBindings)
 //				.appendBinds("/home/annika/geteilt:/usr/geteilt")
-//				.appendBinds(host_dir + ":/tessla")
+				.appendBinds(activeProject.getContainerDir() + ":/tessla")
 				.build();
 
 //		docker.pull("busybox");

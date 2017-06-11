@@ -36,6 +36,12 @@ public class Main {
 		CCodeBuildService cCodeBuilder = new CCodeBuildService();
 		String[] cCodeArgs = cCodeBuilder.getBuildCCodeArgs();
 		dockerSerivce.runDockerCommand(cCodeArgs);
+		
+		System.out.println("onPatchAssembly");
+		AssemblyService assemblyService = new AssemblyService();
+		String[] patchAssemblyArgs = assemblyService.getPatchAssemblyArgs();
+		dockerSerivce.runDockerCommand(patchAssemblyArgs);
+		
 	}
 	
 	public void copyFiles(){

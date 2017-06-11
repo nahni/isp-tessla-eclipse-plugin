@@ -43,7 +43,7 @@ public class CCodeBuildService {
 //		outFile = "/home/annika/Entwicklung/Spielwiese/dummyProjectPath2/sub_add_alternation/build/" + binName;
 		outFile = "build/" + binName;
 		//TOOD wenn das mit der WoringDir geklappt hat wegnehmen
-		outFile = "/tessla/" + outFile;
+//		outFile = "/tessla/" + outFile;
 		
 		
 		// TODO rausnehmen
@@ -84,7 +84,7 @@ public class CCodeBuildService {
 				String relativePath = FileUtil.getRelativePath(activeProject.getProjectPath(), cFile.getAbsolutePath());
 				
 				//TOOD wenn das mit der WoringDir geklappt hat wegnehmen
-				relativePath = "/tessla/" + relativePath;
+//				relativePath = "/tessla/" + relativePath;
 				
 				args.add(relativePath);
 				

@@ -91,7 +91,7 @@ public class DockerService {
 //			    .cmd("-tid", "tessla", "sh")
 			    .cmd("sh", "-c", "while :; do sleep 1; done")
 			    //wenn man die working dir setzt gehts iwie nicht mehr
-//			    .workingDir("/tessla")
+			    .workingDir("/tessla")
 //			    .cmd(args)
 			    .build();
 	

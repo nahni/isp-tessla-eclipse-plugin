@@ -31,8 +31,9 @@ public class PatchedBinaryService {
 //		this.containerDir   = path.join(os.homedir(), '.tessla-env')
 		//containerDir sollte /home/annika/.tessla-env sein
 		String containerDir = System.getProperty("user.home") + ".tessla-env";
+		containerDir = activeProject.getContainerDir();
 		
-		String traceFilePath = containerDir + "instrumented_" + this.activeProject.getBinName() + ".trace";
+		String traceFilePath = containerDir + "instrumented/" + this.activeProject.getBinName() + ".trace";
 		
 	    // remove old trace file before new one would be created
 //	    var traceFile = path.join(this.containerDir, 'instrumented_' + this.activeProject.binName + '.trace')

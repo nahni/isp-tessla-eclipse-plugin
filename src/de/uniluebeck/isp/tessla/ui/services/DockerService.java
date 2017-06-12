@@ -118,6 +118,10 @@ public class DockerService {
 	}
 	
 	public void runDockerCommand(String[] command) throws DockerCertificateException, FileNotFoundException, IOException, DockerException, InterruptedException {
+		runDockerCommand(command, false);
+	}
+	
+	public void runDockerCommand(String[] command, boolean logOn) throws DockerCertificateException, FileNotFoundException, IOException, DockerException, InterruptedException {
 
 
 		// Exec command inside running container with attached STDOUT and STDERR
@@ -129,9 +133,12 @@ public class DockerService {
 		
 		
 		final LogStream output = docker.execStart(execCreation.id());
-//		final String execOutput = output.readFully();
-//
-//		System.out.println("execOutput: " + execOutput);
+		
+		if(logOn){
+			final String execOutput = output.readFully();
+			System.out.println("execOutput: " + execOutput);
+		}
+
 		
 //		// Kill container
 //		docker.killContainer(id);

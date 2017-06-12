@@ -45,6 +45,11 @@ public class WorkingDirFileService {
 			File dest = new File(activeProject.getContainerDir());
 			FileUtils.copyDirectory(src, dest, new WorkingDirFileFilter());
 			
+			//Verzeichnisstruktur fuer Build-Verzeichnis erstellen
+			File instrumentedDir = new File(activeProject.getContainerDir() + "/build/instrumented");
+			if(!instrumentedDir.exists()){
+				instrumentedDir.mkdirs();
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,5 +1,6 @@
 package de.uniluebeck.isp.tessla.ui.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +23,8 @@ public class AssemblyService {
 	}
 	
 	public String[] getPatchAssemblyArgs() {
+		
+		
 //	    const projPath  = this.activeProject.projPath
 //	    const binName   = this.activeProject.binName
 //	    const outputDir = this.activeProject.outputDir
@@ -94,6 +97,16 @@ public class AssemblyService {
 //		  args = args.concat(['-o', 'build/instrumented_' + binName + '.bc'])
 		args.addAll(Arrays.asList("-o", "build/instrumented/" + binName + ".bc"));
 		
+		
+		
+//		args = new ArrayList<String>();
+//		builded = "/tessla/build/sub_add_alternation.bc";
+//		binName = "sub_add_alternation";
+//		args.addAll(Arrays.asList("/usr/lib/llvm-3.8/bin/opt", "-load", "/InstrumentFunctions/libInstrumentFunctions.so", "-instrument_function_calls ", builded));
+//		args.addAll(Arrays.asList("-o", "/tessla/build/instrumented/" + binName + ".bc"));
+		
+		
+		
 		String command = "";
 		for (String string : args) {
 			command = command + " " + string;
@@ -104,7 +117,7 @@ public class AssemblyService {
 		
 		String[] argsArray = new String[args.size()];
 		argsArray = args.toArray(argsArray);
-
+		
 		return argsArray;
 	}
 	
@@ -130,8 +143,8 @@ public class AssemblyService {
 //        this.checkDocker()                       
 
         List<String> args = new ArrayList<String>();
-        args.addAll(Arrays.asList("clang++", "build/instrumented_" + this.activeProject.getBinName() + ".bc", "-o",
-                "build/instrumented_" + this.activeProject.getBinName(), "-lzlog", "-lpthread", "-L/usr/local/lib",
+        args.addAll(Arrays.asList("clang++", "build/instrumented/" + this.activeProject.getBinName() + ".bc", "-o",
+                "build/instrumented/" + this.activeProject.getBinName(), "-lzlog", "-lpthread", "-L/usr/local/lib",
                 "-L/InstrumentFunctions", "-lLogger"));
 
         String command = "";

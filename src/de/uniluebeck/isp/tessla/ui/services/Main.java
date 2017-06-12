@@ -32,15 +32,40 @@ public class Main {
 		
 		dockerSerivce.startDocker(activeProject);
 		
-		System.out.println("onBuildCCode");
-		CCodeBuildService cCodeBuilder = new CCodeBuildService();
-		String[] cCodeArgs = cCodeBuilder.getBuildCCodeArgs();
-		dockerSerivce.runDockerCommand(cCodeArgs);
+//		System.out.println("onBuildCCode");
+//		CCodeBuildService cCodeBuilder = new CCodeBuildService();
+//		String[] cCodeArgs = cCodeBuilder.getBuildCCodeArgs();
+//		dockerSerivce.runDockerCommand(cCodeArgs);
 		
-		System.out.println("onPatchAssembly");
+//		copyFiles();
+		
+		//das hier funktioniert in Java iwie nicht, ka warum
+//		docker exec tessla /usr/lib/llvm-3.8/bin/opt -load /InstrumentFunctions/libInstrumentFunctions.so -instrument_function_calls  build/sub_add_alternation.bc -instrument add -instrument sub -o build/instrumented/sub_add_alternation.bc
+//		System.out.println("onPatchAssembly");
 		AssemblyService assemblyService = new AssemblyService();
-		String[] patchAssemblyArgs = assemblyService.getPatchAssemblyArgs();
-		dockerSerivce.runDockerCommand(patchAssemblyArgs);
+//		String[] patchAssemblyArgs = assemblyService.getPatchAssemblyArgs();
+//		dockerSerivce.runDockerCommand(patchAssemblyArgs);
+		
+		
+		// docker exec tessla clang++ build/instrumented/sub_add_alternation.bc -o build/instrumented/sub_add_alternation -lzlog -lpthread -L/usr/local/lib -L/InstrumentFunctions -lLogger
+//		System.out.println("onBuildAssembly");
+//		String[] buildAssemblyArgs = assemblyService.getBuildAssemblyArgs();
+//		dockerSerivce.runDockerCommand(buildAssemblyArgs);
+		
+		System.out.println("RunPatchedBinary");
+		PatchedBinaryService patchedBinaryService = new PatchedBinaryService();
+		String[] runPatchedBinaryArgs = patchedBinaryService.getRunPatchedBinaryArgs();
+		dockerSerivce.runDockerCommand(runPatchedBinaryArgs);
+		
+//		System.out.println("BuildTeSSLa");
+//		TeSSLaService teSSLaService = new TeSSLaService();
+//		String[] buildTeSSLaArgs = teSSLaService.getBuildTeSSLaArgs();
+//		dockerSerivce.runDockerCommand(buildTeSSLaArgs);
+//		
+//		System.out.println("RunTeSSLa");
+//		String[] runTeSSLaArgs = teSSLaService.getRunTeSSLaArgs();
+//		dockerSerivce.runDockerCommand(runTeSSLaArgs);
+		
 		
 	}
 	

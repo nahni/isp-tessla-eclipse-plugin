@@ -75,7 +75,7 @@ public class TeSSLaService {
 	    List<String> outputArgs = new ArrayList<String>();
 	    String relativePath = FileUtil.getRelativePath(activeProject.getContainerDir(), tsslJSONFile.getAbsolutePath());
 	    //Ich hab wieder den absoluten Pfad genommen und nicht den relativen
-	    outputArgs.addAll(Arrays.asList("LANG=C.UTF-8", "/tessla_server" + relativePath, "--trace", "instrumented_" + activeProject.getBinName() + ".trace"));
+	    outputArgs.addAll(Arrays.asList("LANG=C.UTF-8", "/tessla_server", relativePath, "--trace", "build/instrumented_" + activeProject.getBinName() + ".trace"));
 	    		    
 //	    var outputArgs = [
 //	      'LANG=C.UTF-8',
@@ -84,12 +84,13 @@ public class TeSSLaService {
 //	      'instrumented_' + this.activeProject.binName + '.trace'
 //	    ]
 	    
-	    
 	    List<String> jsonArgs = MyJSONParser.parse(tsslJSONFile);
-	    for (String string : jsonArgs) {
-	    	outputArgs.add("-o");
-	    	outputArgs.add(string);
-		}
+	    outputArgs.addAll(jsonArgs);
+//	    for (String string : jsonArgs) {
+//	    	outputArgs.add("-o");
+//	    	outputArgs.add(string);
+//		}
+	    
 //	    for (var id in tsslJSONContent) {
 //	      var stream = tsslJSONContent[id]
 //	      if (stream.out && stream.name) {
@@ -99,7 +100,7 @@ public class TeSSLaService {
 //	    }
 
         List<String> args = new ArrayList<String>();
-        args.addAll(Arrays.asList("sh", "-c", "\\" + StringUtils.join(outputArgs, " ") + "\\"));
+        args.addAll(Arrays.asList("sh", "-c", "'" + StringUtils.join(outputArgs, " ") + "'"));
     	
 	    // get args for the docker command
 //	    const args = [

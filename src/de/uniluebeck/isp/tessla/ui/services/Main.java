@@ -88,6 +88,9 @@ public class Main {
 //		dockerSerivce.runDockerCommand(buildTeSSLaArgs);
 		dockerSerivce.runCommandForBuildTeSSLa(StringUtils.join(buildTeSSLaArgs, " "), activeProject);
 //		
+		
+		//Das hier geht iwie auch nur in der Konsole (also zumindest ohne Fehler in der Konsole, aber das was rauskommen soll kommt tortzdem nicht raus)
+		//aber programmatisch aus Java kommt der Fehler: /tessla_server: Syntax error: Unterminated quoted string
 		System.out.println("RunTeSSLa");
 		String[] runTeSSLaArgs = teSSLaService.getRunTeSSLaArgs();
 //		dockerSerivce.runDockerCommand(runTeSSLaArgs);

@@ -152,26 +152,56 @@ public class DockerService {
 //		docker.close();
 	}
 	
-	public void runDockerCommand2(){
+	public void runDockerCommand2(String command){
 		try {
 			Runtime rt = Runtime.getRuntime();
-			Process proc = rt.exec("gksudo docker run hello-world");
-
+//			Process proc = rt.exec("gksudo docker exec tessla " + command);
+			Process proc = rt.exec("docker exec tessla " + command);
+			
 			BufferedReader stdInput = new BufferedReader(new 
 			     InputStreamReader(proc.getInputStream()));
 
 			BufferedReader stdError = new BufferedReader(new 
 			     InputStreamReader(proc.getErrorStream()));
 
-			// read the output from the command
-			System.out.println("Here is the standard output of the command:\n");
+//			// read the output from the command
+//			System.out.println("Here is the standard output of the command:\n");
 			String s = null;
 			while ((s = stdInput.readLine()) != null) {
 			    System.out.println(s);
 			}
 
 			// read any errors from the attempted command
-			System.out.println("Here is the standard error of the command (if any):\n");
+//			System.out.println("Here is the standard error of the command (if any):\n");
+			while ((s = stdError.readLine()) != null) {
+			    System.out.println(s);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void runDockerCommand3(String command){
+		try {
+			Runtime rt = Runtime.getRuntime();
+			Process proc = rt.exec("gksudo docker exec tessla " + command);
+			
+			BufferedReader stdInput = new BufferedReader(new 
+			     InputStreamReader(proc.getInputStream()));
+
+			BufferedReader stdError = new BufferedReader(new 
+			     InputStreamReader(proc.getErrorStream()));
+
+//			// read the output from the command
+//			System.out.println("Here is the standard output of the command:\n");
+			String s = null;
+			while ((s = stdInput.readLine()) != null) {
+			    System.out.println(s);
+			}
+
+			// read any errors from the attempted command
+//			System.out.println("Here is the standard error of the command (if any):\n");
 			while ((s = stdError.readLine()) != null) {
 			    System.out.println(s);
 			}
@@ -182,6 +212,9 @@ public class DockerService {
 	}
 	
 	public void removeContainer() throws DockerException, InterruptedException{
+		
+		Thread.sleep(3000);
+		
 		// Kill container
 		docker.killContainer(containerId);
 		

@@ -94,10 +94,17 @@ public class WorkingDirFileService {
 //	    // then create new zlog.conf file
 //	    fs.writeFileSync(path.join(this.containerDir, 'zlog.conf'), formats + rules)
 			
-			out.println(formats);
-			out.println(rules);
+//			out.println(formats);
+//			out.println(rules);
+			
+//			out.close();
+			
+			FileUtils.writeStringToFile(new File(this.activeProject.getContainerDir() + "/build/" + "zlog.conf"), formats + rules);
 			
 		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

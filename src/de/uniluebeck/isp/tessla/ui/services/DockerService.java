@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+
 import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.LogStream;
@@ -209,6 +211,78 @@ public class DockerService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * schreibt noch das tessla.json raus
+	 * @param command
+	 */
+	public void runCommandForBuildTeSSLa(String command, TeSSLaProject activeProject){
+		try {
+			Runtime rt = Runtime.getRuntime();
+//			Process proc = rt.exec("gksudo docker exec tessla " + command);
+			Process proc = rt.exec("docker exec tessla " + command);
+			
+			BufferedReader stdInput = new BufferedReader(new 
+			     InputStreamReader(proc.getInputStream()));
+
+			BufferedReader stdError = new BufferedReader(new 
+			     InputStreamReader(proc.getErrorStream()));
+
+//			// read the output from the command
+//			System.out.println("Here is the standard output of the command:\n");
+			String s = null;
+			StringBuilder sb = new StringBuilder();
+			while ((s = stdInput.readLine()) != null) {
+			    System.out.println(s);;
+			    sb.append(s);
+			    sb.append("\n");
+			}
+			createTeSSLaJson(sb.toString(), activeProject);
+			// read any errors from the attempted command
+//			System.out.println("Here is the standard error of the command (if any):\n");
+			while ((s = stdError.readLine()) != null) {
+			    System.out.println(s);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void createTeSSLaJson(String stdout, TeSSLaProject activeProject){
+//	     // check for compiler errors
+//	      if (stdout.charAt(0) == '{') {
+//	        // cut trailing comma
+//	        //
+//	        // Why the hell the compiler puts an trailing ',' to the string?? should
+//	        // actually be fixed in the compiler binary not in this package!!!!
+//	        if (stdout.charAt(stdout.length - 2) == ',') {
+//	          stdout = stdout.slice(0, -2) + '\n'
+//	        }
+//
+//	        // here we know the compilation process was successful so write content to file
+//	        fs.writeFileSync(path.join(this.containerBuild, 'instrumented_' + this.activeProject.binName + '.tessla.json'), stdout)
+//	      }
+		
+//	     // check for compiler errors
+	      if (stdout.charAt(0) == '{') {
+		        // Why the hell the compiler puts an trailing ',' to the string?? should
+		        // actually be fixed in the compiler binary not in this package!!!!
+		        if (stdout.charAt(stdout.length() - 2) == ',') {
+		          stdout = stdout.substring(0, -2) + "\n";
+		        }
+		        // here we know the compilation process was successful so write content to file
+				try {
+					FileUtils.writeStringToFile(new File(activeProject.getContainerDir() + "/build/" + "instrumented_" + activeProject.getBinName() + ".tessla.json"), stdout);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+	      }else{
+	    	  System.out.println("Error");
+	      }
 	}
 	
 	public void removeContainer() throws DockerException, InterruptedException{

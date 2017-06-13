@@ -16,6 +16,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import de.uniluebeck.isp.tessla.model.TeSSLaProject;
+import de.uniluebeck.isp.tessla.util.FileUtil;
 
 public class TeSSLaService {
 
@@ -44,14 +45,14 @@ public class TeSSLaService {
 //	      return
 //	    }
 
-		String containerDir = System.getProperty("user.home") + ".tessla-env";
 //		this.containerDir   = path.join(os.homedir(), '.tessla-env')
-		String containerBuild = containerDir + "/build";
+		String containerBuild = activeProject.getContainerDir() + "/build";
 //		this.containerBuild = path.join(this.containerDir, 'build')
 		
 		// get json file
 		String tsslJSON = containerBuild + "/instrumented_" + activeProject.getBinName() + ".tessla.json";
-	    // get json file
+	   System.out.println("tsslJSON: " + tsslJSON);
+		// get json file
 //	    var tsslJSON = path.join(this.containerBuild, 'instrumented_' + this.activeProject.binName + '.tessla.json')
 	   File tsslJSONFile = new File(tsslJSON);
 	   if(!tsslJSONFile.exists()){
@@ -71,8 +72,9 @@ public class TeSSLaService {
 //	    var tsslJSCONContent = JSON.parse(JSONString).items
 
 	    List<String> outputArgs = new ArrayList<String>();
+	    String relativePath = FileUtil.getRelativePath(activeProject.getContainerDir(), tsslJSONFile.getAbsolutePath());
 	    //Ich hab wieder den absoluten Pfad genommen und nicht den relativen
-	    outputArgs.addAll(Arrays.asList("LANG=C.UTF-8", "/tessla_server" + tsslJSONFile.getAbsolutePath(), "--trace", "instrumented_" + activeProject.getBinName() + ".trace"));
+	    outputArgs.addAll(Arrays.asList("LANG=C.UTF-8", "/tessla_server" + relativePath, "--trace", "instrumented_" + activeProject.getBinName() + ".trace"));
 	    		    
 //	    var outputArgs = [
 //	      'LANG=C.UTF-8',
@@ -158,11 +160,12 @@ public class TeSSLaService {
 
 		File file = activeProject.getTeSSLaFiles().get(0);
 //	    const file = this.activeProject.tesslaFiles[0]
-
-
+		String absolutePath = file.getAbsolutePath();
+		
+		String relativePath = FileUtil.getRelativePath(activeProject.getProjectPath(), absolutePath);
 		//Ich hab den absoluten Pfad genommen
         List<String> args = new ArrayList<String>();
-        args.addAll(Arrays.asList("java", "-jar", "/tessla-imdea-snapshot.jar", file.getAbsolutePath()));
+        args.addAll(Arrays.asList("java", "-jar", "/tessla-imdea-snapshot.jar", relativePath));
     	
 	    // create command and args
 //	    const args = [

@@ -17,6 +17,7 @@ import org.json.simple.parser.ParseException;
 
 import de.uniluebeck.isp.tessla.model.TeSSLaProject;
 import de.uniluebeck.isp.tessla.util.FileUtil;
+import de.uniluebeck.isp.tessla.util.MyJSONParser;
 
 public class TeSSLaService {
 
@@ -83,29 +84,12 @@ public class TeSSLaService {
 //	      'instrumented_' + this.activeProject.binName + '.trace'
 //	    ]
 	    
-	    JSONParser parser = new JSONParser();
-	    Object obj;
-		try {
-			obj = parser.parse(new FileReader(tsslJSONFile));
-		    JSONObject jsonObject = (JSONObject) obj;
-		    
-		    Iterator it = jsonObject.entrySet().iterator();
-	        while (it.hasNext()) {
-	            Object entry = it.next();
-	            System.out.println(entry);
-	            //TODO ka was da rauskommt
-	        }
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	    
+	    List<String> jsonArgs = MyJSONParser.parse(tsslJSONFile);
+	    for (String string : jsonArgs) {
+	    	outputArgs.add("-o");
+	    	outputArgs.add(string);
+		}
 //	    for (var id in tsslJSONContent) {
 //	      var stream = tsslJSONContent[id]
 //	      if (stream.out && stream.name) {

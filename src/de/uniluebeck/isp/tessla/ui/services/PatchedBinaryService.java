@@ -33,7 +33,7 @@ public class PatchedBinaryService {
 		String containerDir = System.getProperty("user.home") + ".tessla-env";
 		containerDir = activeProject.getContainerDir();
 		
-		String traceFilePath = containerDir + "instrumented/" + this.activeProject.getBinName() + ".trace";
+		String traceFilePath = containerDir + "instrumented_" + this.activeProject.getBinName() + ".trace";
 		
 	    // remove old trace file before new one would be created
 //	    var traceFile = path.join(this.containerDir, 'instrumented_' + this.activeProject.binName + '.trace')
@@ -52,7 +52,7 @@ public class PatchedBinaryService {
 //	    const args = ['exec', 'tessla', './build/instrumented_' + this.activeProject.binName]
 
 	    List<String> args = new ArrayList<String>();
-	    args.addAll(Arrays.asList("./build/instrumented/" + this.activeProject.getBinName()));
+	    args.addAll(Arrays.asList("./build/instrumented_" + this.activeProject.getBinName()));
 	    		
         String command = "";
         for (String string : args) {

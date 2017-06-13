@@ -95,7 +95,7 @@ public class AssemblyService {
 
 		String binName = activeProject.getBinName();
 //		  args = args.concat(['-o', 'build/instrumented_' + binName + '.bc'])
-		args.addAll(Arrays.asList("-o", "build/instrumented/" + binName + ".bc"));
+		args.addAll(Arrays.asList("-o", "build/instrumented_" + binName + ".bc"));
 		
 		
 		
@@ -143,8 +143,8 @@ public class AssemblyService {
 //        this.checkDocker()                       
 
         List<String> args = new ArrayList<String>();
-        args.addAll(Arrays.asList("clang++", "build/instrumented/" + this.activeProject.getBinName() + ".bc", "-o",
-                "build/instrumented/" + this.activeProject.getBinName(), "-lzlog", "-lpthread", "-L/usr/local/lib",
+        args.addAll(Arrays.asList("clang++", "build/instrumented_" + this.activeProject.getBinName() + ".bc", "-o",
+                "build/instrumented_" + this.activeProject.getBinName(), "-lzlog", "-lpthread", "-L/usr/local/lib",
                 "-L/InstrumentFunctions", "-lLogger"));
 
         String command = "";

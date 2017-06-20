@@ -43,7 +43,7 @@ public class Main {
 //		
 //		Thread.sleep(3000);
 //		
-////		docker exec tessla /usr/lib/llvm-3.8/bin/opt -load /InstrumentFunctions/libInstrumentFunctions.so -instrument_function_calls  build/sub_add_alternation.bc -instrument add -instrument sub -o build/instrumented/sub_add_alternation.bc
+//		// docker exec tessla /usr/lib/llvm-3.8/bin/opt -load /InstrumentFunctions/libInstrumentFunctions.so -instrument_function_calls  build/sub_add_alternation.bc -instrument add -instrument sub -o build/instrumented_sub_add_alternation.bc
 //		System.out.println("onPatchAssembly");
 //		AssemblyService assemblyService = new AssemblyService();
 //		String[] patchAssemblyArgs = assemblyService.getPatchAssemblyArgs();
@@ -51,7 +51,7 @@ public class Main {
 ////		dockerSerivce.runDockerCommand(patchAssemblyArgs);
 //		dockerSerivce.runDockerCommand2(StringUtils.join(patchAssemblyArgs, " "));
 //		
-//		// docker exec tessla clang++ build/instrumented/sub_add_alternation.bc -o build/instrumented/sub_add_alternation -lzlog -lpthread -L/usr/local/lib -L/InstrumentFunctions -lLogger
+//		// ddocker exec tessla clang++ build/instrumented_sub_add_alternation.bc -o build/instrumented_sub_add_alternation -lzlog -lpthread -L/usr/local/lib -L/InstrumentFunctions -lLogger
 //		System.out.println("onBuildAssembly");
 //		String[] buildAssemblyArgs = assemblyService.getBuildAssemblyArgs();
 //		dockerSerivce.runDockerCommand(buildAssemblyArgs);
@@ -60,7 +60,7 @@ public class Main {
 //		
 //		
 //		
-//		// docker exec tessla ./build/instrumented/sub_add_alternation
+//		// docker exec tessla ./build/instrumented_sub_add_alternation
 //		//geht immernoch nicht. Muss nachhelfen:
 //		//docker exec -it tessla bash
 //		// cd build
@@ -89,6 +89,7 @@ public class Main {
 		dockerSerivce.runCommandForBuildTeSSLa(StringUtils.join(buildTeSSLaArgs, " "), activeProject);
 //		
 		
+//		docker exec tessla sh -c 'LANG=C.UTF-8 /tessla_server build/instrumented_sub_add_alternation.tessla.json --trace build/instrumented_sub_add_alternation.trace -o 11:diff -o 12:error'
 		//Das hier geht iwie auch nur in der Konsole (also zumindest ohne Fehler in der Konsole, aber das was rauskommen soll kommt tortzdem nicht raus)
 		//aber programmatisch aus Java kommt der Fehler: /tessla_server: Syntax error: Unterminated quoted string
 		System.out.println("RunTeSSLa");

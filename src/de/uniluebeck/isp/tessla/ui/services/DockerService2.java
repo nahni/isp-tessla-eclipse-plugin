@@ -307,37 +307,6 @@ public class DockerService2 {
 	 * This avoids Words Splitting in console
 	 * @param activeProject
 	 */
-	public void runDockerCommandAvoidingWordSplitting(String[] command) {
-		try {
-			Runtime rt = Runtime.getRuntime();
-			Process proc = rt.exec(command);
-			
-			BufferedReader stdInput = new BufferedReader(new 
-			     InputStreamReader(proc.getInputStream()));
-
-			BufferedReader stdError = new BufferedReader(new 
-			     InputStreamReader(proc.getErrorStream()));
-
-			// read the output from the command
-			String s = null;
-			while ((s = stdInput.readLine()) != null) {
-			    System.out.println(s);
-			}
-
-			// read any errors from the attempted command
-			while ((s = stdError.readLine()) != null) {
-			    System.out.println(s);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * This avoids Words Splitting in console
-	 * @param activeProject
-	 */
 	public void runDockerCommandAvoidingWordSplitting2(String[] command) {
 		try {
 			

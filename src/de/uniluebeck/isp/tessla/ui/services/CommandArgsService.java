@@ -126,16 +126,8 @@ public class CommandArgsService {
 	public String[] getAddStandardLibrary_Args() {
 		List<String> args = new ArrayList<String>();
 		
-//		docker run --volume /home/annika/Downloads/Docker2_Beispiel:/tessla --rm tessla sh -c 'cd /tessla && cat /usr/local/opt/tessla_rv/streams.tessla spec.tessla > spec2.tessla'
-//		cat /usr/local/opt/tessla_rv/streams.tessla spec.tessla > spec2.tessla'
-//		V1
-//		args.addAll(Arrays.asList("cat", "/usr/local/opt/tessla_rv/streams.tessla spec.tessla", ">", "spec2.tessla"));
-		
-//		Version 2:
-//		docker exec tessla cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla
-		args.addAll(Arrays.asList("cat", "spec.tessla", "/usr/local/opt/tessla_rv/streams.tessla", ">", "spec2.tessla"));
-		
-//		args.addAll(Arrays.asList("cat", "'spec.tessla'", "'/usr/local/opt/tessla_rv/streams.tessla'", ">", "'spec2.tessla'"));
+		// docker exec tessla sh -c cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla
+		args.addAll(Arrays.asList("sh", "-c", "cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla"));
 		
 		
         String command = "";
@@ -153,10 +145,8 @@ public class CommandArgsService {
 	public String[] getRunTeSSLa_Args() {
 		List<String> args = new ArrayList<String>();
 		
-//		docker run --volume /home/annika/Downloads/Docker2_Beispiel:/tessla --rm tessla sh -c 'cd /tessla && tessla spec2.tessla traces.log'
-//		tessla spec2.tessla traces.log'
-		
-		args.addAll(Arrays.asList("tessla", "spec2.tessla", "traces.log"));
+		//docker exec tessla sh -c cd /tessla && tessla spec2.tessla traces.log
+		args.addAll(Arrays.asList("sh", "-c", "cd /tessla && tessla spec2.tessla traces.log"));
 		
         String command = "";
         for (String string : args) {

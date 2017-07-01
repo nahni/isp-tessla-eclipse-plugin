@@ -39,73 +39,33 @@ public class Main2 {
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
 		
 		String[] compileToLLVM_BC_Args = commandArgsService.getCompileToLLVM_BC_Args();
-//		dockerSerivce.runDockerCommand2(StringUtils.join(compileToLLVM_BC_Args, " "));
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(compileToLLVM_BC_Args);
 		
 		Thread.sleep(3000);
 		
 		String[] instrument_BC_Args = commandArgsService.getInstrument_BC_Args();
-//		dockerSerivce.runDockerCommand2(StringUtils.join(instrument_BC_Args, " "));
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(instrument_BC_Args);
 		
 		Thread.sleep(3000);
 		
 		String[] compileToBinary_Args = commandArgsService.getCompileToBinary_Args();
-//		dockerSerivce.runDockerCommand2(StringUtils.join(compileToBinary_Args, " "));
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(compileToBinary_Args);
 		
 		Thread.sleep(3000);
 		
 		String[] runBinary_Args = commandArgsService.getRunBinary_Args();
-//		dockerSerivce.runDockerCommand2(StringUtils.join(runBinary_Args, " "));
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(runBinary_Args);
 		
 		Thread.sleep(3000);
 		
-		//das hier funktioniert nicht 
-		//cat: '>': No such file or directory
-//		cat: spec2.tessla: No such file or directory
-		//gleicher Befehl auf der Konsole per Hand funktioniert
 		String[] addStandardLibrary_Args = commandArgsService.getAddStandardLibrary_Args();
-//		dockerSerivce.runDockerCommand2(StringUtils.join(addStandardLibrary_Args, " "));
-//		dockerSerivce.runDockerCommand2(StringUtils.join(addStandardLibrary_Args, " "));
-//		dockerSerivce.runDockerCommand2("'cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla'");
-//		dockerSerivce.runDockerCommand2("sh -c 'cd /tessla && cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla'");
-//		dockerSerivce.runDockerCommandCat();
-//		dockerSerivce.runDockerCommandCat2(activeProject);
-		
-		List<String> args2 = new ArrayList<String>();
-//		args2.addAll(Arrays.asList("docker", "exec", "tessla", "sh", "-c", "cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla"));
-		args2.addAll(Arrays.asList("sh", "-c", "cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla"));
-		
-		String[] argsArray2 = new String[args2.size()];
-		argsArray2 = args2.toArray(argsArray2);
-//		dockerSerivce.runDockerCommandAvoidingWordSplitting(argsArray2);
-		dockerSerivce.runDockerCommandAvoidingWordSplitting2(argsArray2);
+		dockerSerivce.runDockerCommandAvoidingWordSplitting2(addStandardLibrary_Args);
 		
 		Thread.sleep(3000);
 
-		//das gleiche Problem: das geht mit docker exec nicht
-//		sudo docker run --volume /home/annika/.tessla-env:/tessla --rm tessla sh -c 'cd /tessla && tessla spec2.tessla traces.log'
+		//docker exec tessla sh -c cd /tessla && tessla spec2.tessla traces.log
 		String[] runTeSSLa_Args = commandArgsService.getRunTeSSLa_Args();
-//		dockerSerivce.runDockerCommand2(StringUtils.join(runTeSSLa_Args, " "));
-		
-		//ganz komisch. AUs eclipse raus geht das nicht. Fehler:
-		// /tessla: 1: /tessla: Syntax error: Unterminated quoted string
-		//aber wenn ich das 1:1 so ins terminal kopiere funktionierts
-//		dockerSerivce.runDockerCommandRunTessla(activeProject);
-		
-		// das hier duerfte funktionieren
-		//sudo docker exec tessla sh -c 'cd /tessla && tessla spec2.tessla traces.log'
-		List<String> args = new ArrayList<String>();
-//		args.addAll(Arrays.asList("docker", "exec", "tessla", "sh", "-c", "cd /tessla && tessla spec2.tessla traces.log"));
-		args.addAll(Arrays.asList("sh", "-c", "cd /tessla && tessla spec2.tessla traces.log"));
-		
-		String[] argsArray = new String[args.size()];
-		argsArray = args.toArray(argsArray);
-//		dockerSerivce.runDockerCommandAvoidingWordSplitting(argsArray);
-		dockerSerivce.runDockerCommandAvoidingWordSplitting2(argsArray);
-		
+		dockerSerivce.runDockerCommandAvoidingWordSplitting2(runTeSSLa_Args);
 		
 		
 	}

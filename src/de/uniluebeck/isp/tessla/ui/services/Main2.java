@@ -24,7 +24,7 @@ public class Main2 {
 	
 	public static void main(String[] args) throws FileNotFoundException, DockerCertificateException, IOException, DockerException, InterruptedException {
 		Main2 main = new Main2();
-//		main.copyFiles();
+		main.copyFiles();
 		main.run();
 	}
 	
@@ -39,22 +39,26 @@ public class Main2 {
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
 		
 		String[] compileToLLVM_BC_Args = commandArgsService.getCompileToLLVM_BC_Args();
-		dockerSerivce.runDockerCommand2(StringUtils.join(compileToLLVM_BC_Args, " "));
+//		dockerSerivce.runDockerCommand2(StringUtils.join(compileToLLVM_BC_Args, " "));
+		dockerSerivce.runDockerCommandAvoidingWordSplitting2(compileToLLVM_BC_Args);
 		
 		Thread.sleep(3000);
 		
 		String[] instrument_BC_Args = commandArgsService.getInstrument_BC_Args();
-		dockerSerivce.runDockerCommand2(StringUtils.join(instrument_BC_Args, " "));
+//		dockerSerivce.runDockerCommand2(StringUtils.join(instrument_BC_Args, " "));
+		dockerSerivce.runDockerCommandAvoidingWordSplitting2(instrument_BC_Args);
 		
 		Thread.sleep(3000);
 		
 		String[] compileToBinary_Args = commandArgsService.getCompileToBinary_Args();
-		dockerSerivce.runDockerCommand2(StringUtils.join(compileToBinary_Args, " "));
+//		dockerSerivce.runDockerCommand2(StringUtils.join(compileToBinary_Args, " "));
+		dockerSerivce.runDockerCommandAvoidingWordSplitting2(compileToBinary_Args);
 		
 		Thread.sleep(3000);
 		
 		String[] runBinary_Args = commandArgsService.getRunBinary_Args();
-		dockerSerivce.runDockerCommand2(StringUtils.join(runBinary_Args, " "));
+//		dockerSerivce.runDockerCommand2(StringUtils.join(runBinary_Args, " "));
+		dockerSerivce.runDockerCommandAvoidingWordSplitting2(runBinary_Args);
 		
 		Thread.sleep(3000);
 		

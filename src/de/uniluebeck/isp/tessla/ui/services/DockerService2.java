@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.ArrayUtils;
 
 import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DockerClient;
@@ -310,6 +311,39 @@ public class DockerService2 {
 		try {
 			Runtime rt = Runtime.getRuntime();
 			Process proc = rt.exec(command);
+			
+			BufferedReader stdInput = new BufferedReader(new 
+			     InputStreamReader(proc.getInputStream()));
+
+			BufferedReader stdError = new BufferedReader(new 
+			     InputStreamReader(proc.getErrorStream()));
+
+			// read the output from the command
+			String s = null;
+			while ((s = stdInput.readLine()) != null) {
+			    System.out.println(s);
+			}
+
+			// read any errors from the attempted command
+			while ((s = stdError.readLine()) != null) {
+			    System.out.println(s);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * This avoids Words Splitting in console
+	 * @param activeProject
+	 */
+	public void runDockerCommandAvoidingWordSplitting2(String[] command) {
+		try {
+			
+			String[] finalCommand = (String[]) ArrayUtils.addAll(new String[] {"docker", "exec", "tessla"}, command);
+			Runtime rt = Runtime.getRuntime();
+			Process proc = rt.exec(finalCommand);
 			
 			BufferedReader stdInput = new BufferedReader(new 
 			     InputStreamReader(proc.getInputStream()));

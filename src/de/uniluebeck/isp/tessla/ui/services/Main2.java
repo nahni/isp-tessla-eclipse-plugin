@@ -75,11 +75,13 @@ public class Main2 {
 //		dockerSerivce.runDockerCommandCat2(activeProject);
 		
 		List<String> args2 = new ArrayList<String>();
-		args2.addAll(Arrays.asList("docker", "exec", "tessla", "sh", "-c", "cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla"));
+//		args2.addAll(Arrays.asList("docker", "exec", "tessla", "sh", "-c", "cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla"));
+		args2.addAll(Arrays.asList("sh", "-c", "cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla"));
 		
 		String[] argsArray2 = new String[args2.size()];
 		argsArray2 = args2.toArray(argsArray2);
-		dockerSerivce.runDockerCommandAvoidingWordSplitting(argsArray2);
+//		dockerSerivce.runDockerCommandAvoidingWordSplitting(argsArray2);
+		dockerSerivce.runDockerCommandAvoidingWordSplitting2(argsArray2);
 		
 		Thread.sleep(3000);
 
@@ -96,11 +98,13 @@ public class Main2 {
 		// das hier duerfte funktionieren
 		//sudo docker exec tessla sh -c 'cd /tessla && tessla spec2.tessla traces.log'
 		List<String> args = new ArrayList<String>();
-		args.addAll(Arrays.asList("docker", "exec", "tessla", "sh", "-c", "cd /tessla && tessla spec2.tessla traces.log"));
+//		args.addAll(Arrays.asList("docker", "exec", "tessla", "sh", "-c", "cd /tessla && tessla spec2.tessla traces.log"));
+		args.addAll(Arrays.asList("sh", "-c", "cd /tessla && tessla spec2.tessla traces.log"));
 		
 		String[] argsArray = new String[args.size()];
 		argsArray = args.toArray(argsArray);
-		dockerSerivce.runDockerCommandAvoidingWordSplitting(argsArray);
+//		dockerSerivce.runDockerCommandAvoidingWordSplitting(argsArray);
+		dockerSerivce.runDockerCommandAvoidingWordSplitting2(argsArray);
 		
 		
 		

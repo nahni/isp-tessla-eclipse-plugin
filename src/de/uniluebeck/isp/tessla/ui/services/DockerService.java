@@ -42,11 +42,9 @@ public class DockerService {
 			Runtime rt = Runtime.getRuntime();
 			Process proc = rt.exec(command);
 			
-			BufferedReader stdInput = new BufferedReader(new 
-			     InputStreamReader(proc.getInputStream()));
+			BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
-			BufferedReader stdError = new BufferedReader(new 
-			     InputStreamReader(proc.getErrorStream()));
+			BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 
 			// read the output from the command
 			String s = null;

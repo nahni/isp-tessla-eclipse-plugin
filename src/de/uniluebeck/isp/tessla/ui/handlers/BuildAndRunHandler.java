@@ -26,26 +26,20 @@ import de.uniluebeck.isp.tessla.ui.services.TeSSLaService;
  */
 public class BuildAndRunHandler extends AbstractHandler {
 
-//	private final static String PROJECT_PATH = "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/dummyProjectPath/sub_add_alternation";
-	private final static String PROJECT_PATH = "/home/annika/geteilt/dummyProjectPath/sub_add_alternation";
-	
+	private final static String PROJECT_PATH = "/home/annika/Entwicklung/Spielwiese/dummyProjectPath3/sub_add_alternation";
+
 	private final static String OUTPUT_DIR = "";
 	private final static String BIN_NAME = "";
 	
 	TeSSLaProject activeProject;
 	
-	DockerService dockerSerivce;
 	
 	public BuildAndRunHandler(){
-		dockerSerivce = new DockerService();
+		activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
 	}
 	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
-		activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
-		
-		
 		
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 //		MessageDialog.openInformation(
@@ -93,101 +87,6 @@ public class BuildAndRunHandler extends AbstractHandler {
 		return null;
 	}
 	
-//	public void startDocker(String[] command ) throws DockerCertificateException, FileNotFoundException, IOException, DockerException, InterruptedException {
-//		System.out.println("startDocker");
-//		
-//		Builder builder = DefaultDockerClient.fromEnv();
-//		builder.connectTimeoutMillis(60000);
-//		builder.readTimeoutMillis(60000);
-//		
-//		final DockerClient docker = builder.build();
-//		
-////		final File imageFile = new File("C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Atom/tessla");
-//		final File imageFile = new File("/home/annika/Entwicklung/Files/tessla");
-//		final String image = "tessla" + System.nanoTime();
-//		try (InputStream imagePayload = new BufferedInputStream(new FileInputStream(imageFile))) {
-//		  docker.create(image, imagePayload);
-//		}
-//		
-//		final String[] ports = {"80"};
-//		final Map<String, List<PortBinding>> portBindings = new HashMap<>();
-//		for (String port : ports) {
-//		    List<PortBinding> hostPorts = new ArrayList<>();
-//		    
-//		    // die 192.168.99.100 geht bei Linux iwie nicht. Funktioniert nur auf Windows
-////		    hostPorts.add(PortBinding.of("192.168.99.100", port));
-//		    //und das geht bei mir nur auf Windows aber nicht auf Linux
-//		    hostPorts.add(PortBinding.of("127.0.0.1", port));
-//		    portBindings.put(port, hostPorts);
-//		}
-//		
-////		-v /Users/<path>:/<container path> ...
-////		https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume
-////		If you are using Docker Machine on Mac or Windows, your Docker Engine daemon has only limited access to your macOS or Windows filesystem. Docker Machine tries to auto-share your /Users (macOS) or C:\Users (Windows) directory. S
-////		All other paths come from your virtual machine�s filesystem, so if you want to make some other host folder available for sharing, you need to do additional work.
-//		final HostConfig hostConfig = HostConfig.builder()
-//				.portBindings(portBindings)
-////				.appendBinds("/local/path:/remote/path")
-////				.appendBinds("C:/Users/lenovo/SSEProjekt/shared:c:/src")
-////				.appendBinds("/Users/lenovo/SSEProjekt/shared:/src")
-//				.appendBinds("/home/annika/geteilt:/usr/geteilt")
-//				.build();
-//
-////		docker.pull("busybox");
-//		
-//
-//		// Create container with exposed ports
-//		final ContainerConfig containerConfig = ContainerConfig.builder()
-//		    .hostConfig(hostConfig)
-////		    .image("busybox").exposedPorts(ports)
-//		    .image("tessla").exposedPorts(ports)
-//		    //-rm
-//		    .cmd("sh", "-c", "while :; do sleep 1; done")
-////		    .cmd(args)
-//		    .build();
-//
-//		final ContainerCreation creation = docker.createContainer(containerConfig);
-//		final String id = creation.id();
-//
-//		// Inspect container
-//		final ContainerInfo info = docker.inspectContainer(id);
-//
-//		System.out.println("info: " + info);
-//		// geht in Linux iwie nicht, funktioniert nur auf Windows. Ka warum
-////		Volume volumes = docker.inspectVolume(id);
-////		System.out.println("volumes: " + volumes);
-//		
-//		// Start container
-//		docker.startContainer(id);
-//
-//		// Exec command inside running container with attached STDOUT and STDERR
-////		final String[] command = {"bash", "-c", "ls"};
-////		String[] command = getBuildAssemblyArgs();
-//		final ExecCreation execCreation = docker.execCreate(
-//		    id, command, DockerClient.ExecCreateParam.attachStdout(),
-//		    DockerClient.ExecCreateParam.attachStderr());
-//		
-//		
-//		final LogStream output = docker.execStart(execCreation.id());
-//		//Caused by: java.lang.RuntimeException: java.io.IOException: Die Verbindung wurde vom Kommunikationspartner zurückgesetzt
-////		final String execOutput = output.readFully();
-////		System.out.println("execOutput: " + execOutput);
-//		
-//		// Kill container
-//		docker.killContainer(id);
-//
-//		System.out.println("Container killed");
-//		
-//		// Remove container
-//		docker.removeContainer(id);
-//
-//		// Close the docker client
-//		docker.close();
-//		
-//		System.out.println("Container closed");
-//
-//	}
-
 	private void onCompileAndRunProject() throws FileNotFoundException, DockerCertificateException, IOException, DockerException, InterruptedException {
 
 //	    // start compilation process
@@ -211,35 +110,26 @@ public class BuildAndRunHandler extends AbstractHandler {
 //	      buildAssembly: true
 //	    })		
 		
-		dockerSerivce.startDocker(activeProject);
-		
 		System.out.println("onBuildCCode");
-		CCodeBuildService cCodeBuilder = new CCodeBuildService();
-		String[] cCodeArgs = cCodeBuilder.getBuildCCodeArgs();
-		dockerSerivce.runDockerCommand(cCodeArgs);
+		CCodeBuildService cCodeBuilder = new CCodeBuildService(activeProject);
+		cCodeBuilder.buildCCode();
 		
 		System.out.println("onPatchAssembly");
-		AssemblyService assemblyService = new AssemblyService();
-		String[] patchAssemblyArgs = assemblyService.getPatchAssemblyArgs();
-		dockerSerivce.runDockerCommand(patchAssemblyArgs);
+		AssemblyService assemblyService = new AssemblyService(activeProject);
+		assemblyService.patchAssembly();
 		
 		System.out.println("onBuildAssembly");
-		String[] buildAssemblyArgs = assemblyService.getBuildAssemblyArgs();
-		dockerSerivce.runDockerCommand(buildAssemblyArgs);
+		assemblyService.buildAssembly();
 		
 		System.out.println("RunPatchedBinary");
-		PatchedBinaryService patchedBinaryService = new PatchedBinaryService();
-		String[] runPatchedBinaryArgs = patchedBinaryService.getRunPatchedBinaryArgs();
-		dockerSerivce.runDockerCommand(runPatchedBinaryArgs);
+		PatchedBinaryService patchedBinaryService = new PatchedBinaryService(activeProject);
+		patchedBinaryService.runPatchedBinary();
 		
 		System.out.println("BuildTeSSLa");
-		TeSSLaService teSSLaService = new TeSSLaService();
-		String[] buildTeSSLaArgs = teSSLaService.getBuildTeSSLaArgs();
-		dockerSerivce.runDockerCommand(buildTeSSLaArgs);
+		TeSSLaService teSSLaService = new TeSSLaService(activeProject);
+		teSSLaService.addStandardLibrary();
 		
 		System.out.println("RunTeSSLa");
-		String[] runTeSSLaArgs = teSSLaService.getRunTeSSLaArgs();
-		dockerSerivce.runDockerCommand(runTeSSLaArgs);
-		
+		teSSLaService.runTeSSLa();
 	}
 }

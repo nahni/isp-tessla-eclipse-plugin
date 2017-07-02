@@ -31,7 +31,7 @@ public class Main2 {
 	public void run() throws FileNotFoundException, DockerCertificateException, IOException, DockerException, InterruptedException{
 		activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
 		
-		DockerService2 dockerSerivce = new DockerService2();
+		DockerService dockerSerivce = new DockerService();
 		dockerSerivce.startDocker(activeProject);
 
 		

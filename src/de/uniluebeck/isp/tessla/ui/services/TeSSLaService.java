@@ -1,177 +1,30 @@
 package de.uniluebeck.isp.tessla.ui.services;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import de.uniluebeck.isp.tessla.model.TeSSLaProject;
-import de.uniluebeck.isp.tessla.util.FileUtil;
-import de.uniluebeck.isp.tessla.util.MyJSONParser;
 
 public class TeSSLaService {
 
-//	private final static String PROJECT_PATH = "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/dummyProjectPath/sub_add_alternation";
-	private final static String PROJECT_PATH = "/home/annika/geteilt/dummyProjectPath/sub_add_alternation";
-	private final static String OUTPUT_DIR = "";
-	private final static String BIN_NAME = "";
-	
 	TeSSLaProject activeProject;
 	
-	public TeSSLaService(){
-		activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
+	public TeSSLaService(TeSSLaProject activeProject){
+		this.activeProject = activeProject;
 	}
 	
-	public String[] getRunTeSSLaArgs(){
+	public void addStandardLibrary(){
+//		getAddStandardLibrary_Args:  sh -c cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla
+		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
+		String[] addStandardLibrary_Args = commandArgsService.getAddStandardLibrary_Args();
 		
-		// skip if there is no active project!
-		if(StringUtils.isBlank(activeProject.getProjectPath())){
-//		      this.viewMgr.showNoProjectNotification()
-		      return null;
-		}
-
-//		  // skip if there is no active project!
-//	    if ( !this.activeProject.projPath ) {
-//	      this.viewMgr.showNoProjectNotification()
-//	      return
-//	    }
-
-//		this.containerDir   = path.join(os.homedir(), '.tessla-env')
-		String containerBuild = activeProject.getContainerDir() + "/build";
-//		this.containerBuild = path.join(this.containerDir, 'build')
-		
-		// get json file
-		String tsslJSON = containerBuild + "/instrumented_" + activeProject.getBinName() + ".tessla.json";
-	   System.out.println("tsslJSON: " + tsslJSON);
-		// get json file
-//	    var tsslJSON = path.join(this.containerBuild, 'instrumented_' + this.activeProject.binName + '.tessla.json')
-	   File tsslJSONFile = new File(tsslJSON);
-	   if(!tsslJSONFile.exists()){
-//		      this.viewMgr.showNoTeSSLaJSONFoundNotification()
-		   return null;	   
-	   }
-//		if ( !fs.existsSync(tsslJSON) ) {
-//	      this.viewMgr.showNoTeSSLaJSONFoundNotification()
-//	      return
-//	    }
-
-	   //brauch ich gar nicht
-//	   String JSONString = FileUtils.readFileToString(tsslJSONFile);
-	   
-	    // get the first found file
-//	    var JSONString      = fs.readFileSync(tsslJSON).toString()
-//	    var tsslJSCONContent = JSON.parse(JSONString).items
-
-	    List<String> outputArgs = new ArrayList<String>();
-	    String relativePath = FileUtil.getRelativePath(activeProject.getContainerDir(), tsslJSONFile.getAbsolutePath());
-	    //Ich hab wieder den absoluten Pfad genommen und nicht den relativen
-	    outputArgs.addAll(Arrays.asList("LANG=C.UTF-8", "/tessla_server", relativePath, "--trace", "build/instrumented_" + activeProject.getBinName() + ".trace"));
-	    		    
-//	    var outputArgs = [
-//	      'LANG=C.UTF-8',
-//	      '/tessla_server',path.relative(this.containerDir, tsslJSON).replace(/\\/g, '/'),
-//	      '--trace',
-//	      'instrumented_' + this.activeProject.binName + '.trace'
-//	    ]
-	    
-	    List<String> jsonArgs = MyJSONParser.parse(tsslJSONFile);
-	    outputArgs.addAll(jsonArgs);
-//	    for (String string : jsonArgs) {
-//	    	outputArgs.add("-o");
-//	    	outputArgs.add(string);
-//		}
-	    
-//	    for (var id in tsslJSONContent) {
-//	      var stream = tsslJSONContent[id]
-//	      if (stream.out && stream.name) {
-//	        outputArgs.push('-o')
-//	        outputArgs.push(stream.id + ':' + stream.name)
-//	      }
-//	    }
-
-        List<String> args = new ArrayList<String>();
-        args.addAll(Arrays.asList("sh", "-c", "'" + StringUtils.join(outputArgs, " ") + "'"));
-    	
-	    // get args for the docker command
-//	    const args = [
-//	      'exec',
-//	      'tessla',
-//	      'sh',
-//	      '-c',
-//	      '\'' + outputArgs.join(' ') + '\''
-//	    ]
-		
-	    
-        String command = "";
-        for (String string : args) {
-            command = command + " " + string;
-        }
-        System.out.println("getRunTeSSLaArgs: " + command);
-        
-        String[] argsArray = new String[args.size()];
-        argsArray = args.toArray(argsArray);
-
-        return argsArray;	    		
+		DockerService dockerSerivce = new DockerService();
+		dockerSerivce.runDockerCommandAvoidingWordSplitting2(addStandardLibrary_Args);
 	}
 	
-	public String[] getBuildTeSSLaArgs(){
+	public void runTeSSLa(){
+//		getRunTeSSLa_Args:  sh -c cd /tessla && tessla spec2.tessla traces.log
+		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
+		String[] runTeSSLa_Args = commandArgsService.getRunTeSSLa_Args();
 		
-		// skip if there are no files to compile
-		if(CollectionUtils.isEmpty(activeProject.getTeSSLaFiles())){
-//		      this.viewMgr.showNoCompilableTeSSLaFilesNotification()
-		      return null;
-		}else if(activeProject.getTeSSLaFiles().size() > 1){
-//			this.viewMgr.showTooMuchCompilableTeSSLaFilesNotification()
-			//TODO: warum kein return null?
-		}
-
-//	    // skip if there are no files to compile
-//	    if (!this.activeProject.tesslaFiles) {
-//	      this.viewMgr.showNoCompilableTeSSLaFilesNotification()
-//	      return
-//	    } else if (this.activeProject.tesslaFiles.length > 1) {
-//	      this.viewMgr.showTooMuchCompilableTeSSLaFilesNotification()
-//	    }
-
-		File file = activeProject.getTeSSLaFiles().get(0);
-//	    const file = this.activeProject.tesslaFiles[0]
-		String absolutePath = file.getAbsolutePath();
-		
-		String relativePath = FileUtil.getRelativePath(activeProject.getProjectPath(), absolutePath);
-		//Ich hab den absoluten Pfad genommen
-        List<String> args = new ArrayList<String>();
-        args.addAll(Arrays.asList("java", "-jar", "/tessla-imdea-snapshot.jar", relativePath));
-    	
-	    // create command and args
-//	    const args = [
-//	      'exec',
-//	      'tessla',
-//	      'java',
-//	      '-jar',
-//	      '/tessla-imdea-snapshot.jar',
-//	      path.relative(this.activeProject.projPath, file).replace(/\\/g, '/')
-//	    ]
-        
-        String command = "";
-        for (String string : args) {
-            command = command + " " + string;
-        }
-        System.out.println("getBuildTeSSLaArgs: " + command);
-        
-        String[] argsArray = new String[args.size()];
-        argsArray = args.toArray(argsArray);
-
-        return argsArray;
+		DockerService dockerSerivce = new DockerService();
+		dockerSerivce.runDockerCommandAvoidingWordSplitting2(runTeSSLa_Args);
 	}
-	
 }

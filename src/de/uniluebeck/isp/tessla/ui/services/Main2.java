@@ -32,7 +32,9 @@ public class Main2 {
 		activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
 		
 		DockerService2 dockerSerivce = new DockerService2();
-//		dockerSerivce.startDocker(activeProject);
+		dockerSerivce.startDocker(activeProject);
+		
+//		dockerSerivce.removeContainer();
 		
 		Thread.sleep(3000);
 		

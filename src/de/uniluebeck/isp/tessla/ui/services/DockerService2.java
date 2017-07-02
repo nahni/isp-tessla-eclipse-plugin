@@ -38,306 +38,127 @@ public class DockerService2 {
 	
 	private String containerId = "";
 	
+	
 	public void startDocker(TeSSLaProject activeProject) throws DockerCertificateException, FileNotFoundException, IOException, DockerException, InterruptedException{
 		//docker run --volume /home/annika/Entwicklung/Spielwiese/dummyProjectPath:/tessla -w /tessla -tid --name tessla tessla sh
 		
-		String host_dir = activeProject.getProjectPath();
+		String host_dir = activeProject.getContainerDir();
 		
-//		List<String> args = new ArrayList<String>();
+		String tesslaFilePath = "/home/annika/Entwicklung/Files/tessla2-docker";
+		
+		List<String> loadArgs = new ArrayList<String>();
+		loadArgs.addAll(Arrays.asList("docker", "load", "-i",tesslaFilePath));
+		
+		String[] loadArgsArray = new String[loadArgs.size()];
+		loadArgsArray = loadArgs.toArray(loadArgsArray);
+		
+		runCommand(loadArgsArray);
+		
+		System.out.println("run Docker:");
+		
+		List<String> args = new ArrayList<String>();
 //		args.addAll(Arrays.asList("docker", "run", "--volume", host_dir + ":/tessla", "-w", "/tessla", "-tid", "--name", "tessla", "tessla", "sh"));
-	
+//		args.addAll(Arrays.asList("docker", "run", "--volume", host_dir + ":/tessla", "-w", "/tessla", "--name", "tessla", "tessla", "sh"));
+//		args.addAll(Arrays.asList("docker", "run", "--volume", host_dir + ":/tessla", "-w", "/tessla", "--name", "tessla", "tessla", "sh", "-c"));
+//		args.addAll(Arrays.asList("docker", "run", "--volume", host_dir + ":/tessla", "-w", "/tessla", "--name", "tessla", tesslaFilePath, "sh", "-c"));
+//		args.addAll(Arrays.asList("docker", "run", "--volume", host_dir + ":/tessla", "-w", "/tessla", "--name", "tessla", "tessla", "sh", "-c"));
+//		args.addAll(Arrays.asList("docker", "run", "--volume", host_dir + ":/tessla", "-w", "/tessla", "--name", "tessla", "tessla", "sh"));
+		args.addAll(Arrays.asList("docker", "run", "-itd", "--volume", host_dir + ":/tessla", "-w", "/tessla", "--name", "tessla", "tessla", "sh"));
+		
+		
+		String[] argsArray = new String[args.size()];
+		argsArray = args.toArray(argsArray);
+		
+		runCommand(argsArray);
 		
 		// -------------------------------------
-		
-		Builder builder = DefaultDockerClient.fromEnv();
-		builder.connectTimeoutMillis(60000);
-		builder.readTimeoutMillis(60000);
-		
-		docker = builder.build();
-		
-//		final File imageFile = new File("C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Atom/tessla");
-		final File imageFile = new File("/home/annika/Entwicklung/Files/tessla2-docker");
-		final String image = "tessla" + System.nanoTime();
-		try (InputStream imagePayload = new BufferedInputStream(new FileInputStream(imageFile))) {
-		  docker.create(image, imagePayload);
-		}
-		
-		final String[] ports = {"80"};
-		final Map<String, List<PortBinding>> portBindings = new HashMap<>();
-		for (String port : ports) {
-		    List<PortBinding> hostPorts = new ArrayList<>();
-		    
-		    // die 192.168.99.100 geht bei Linux iwie nicht. Funktioniert nur auf Windows
-//		    hostPorts.add(PortBinding.of("192.168.99.100", port));
-		    //und das geht bei mir nur auf Windows aber nicht auf Linux
-		    hostPorts.add(PortBinding.of("127.0.0.1", port));
-		    portBindings.put(port, hostPorts);
-		}
-		
-//		-v /Users/<path>:/<container path> ...
-//		https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume
-//		If you are using Docker Machine on Mac or Windows, your Docker Engine daemon has only limited access to your macOS or Windows filesystem. Docker Machine tries to auto-share your /Users (macOS) or C:\Users (Windows) directory. S
-//		All other paths come from your virtual machine�s filesystem, so if you want to make some other host folder available for sharing, you need to do additional work.
-		final HostConfig hostConfig = HostConfig.builder()
-				.portBindings(portBindings)
-//				.appendBinds("/home/annika/geteilt:/usr/geteilt")
-				.appendBinds(activeProject.getContainerDir() + ":/tessla")
-				.build();
+//		
+//		Builder builder = DefaultDockerClient.fromEnv();
+//		builder.connectTimeoutMillis(60000);
+//		builder.readTimeoutMillis(60000);
+//		
+//		docker = builder.build();
+//		
+////		final File imageFile = new File("C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Atom/tessla");
+//		final File imageFile = new File("/home/annika/Entwicklung/Files/tessla2-docker");
+//		final String image = "tessla" + System.nanoTime();
+//		try (InputStream imagePayload = new BufferedInputStream(new FileInputStream(imageFile))) {
+//		  docker.create(image, imagePayload);
+//		}
+//		
+//		final String[] ports = {"80"};
+//		final Map<String, List<PortBinding>> portBindings = new HashMap<>();
+//		for (String port : ports) {
+//		    List<PortBinding> hostPorts = new ArrayList<>();
+//		    
+//		    // die 192.168.99.100 geht bei Linux iwie nicht. Funktioniert nur auf Windows
+////		    hostPorts.add(PortBinding.of("192.168.99.100", port));
+//		    //und das geht bei mir nur auf Windows aber nicht auf Linux
+//		    hostPorts.add(PortBinding.of("127.0.0.1", port));
+//		    portBindings.put(port, hostPorts);
+//		}
+//		
+////		-v /Users/<path>:/<container path> ...
+////		https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume
+////		If you are using Docker Machine on Mac or Windows, your Docker Engine daemon has only limited access to your macOS or Windows filesystem. Docker Machine tries to auto-share your /Users (macOS) or C:\Users (Windows) directory. S
+////		All other paths come from your virtual machine�s filesystem, so if you want to make some other host folder available for sharing, you need to do additional work.
+//		final HostConfig hostConfig = HostConfig.builder()
+//				.portBindings(portBindings)
+////				.appendBinds("/home/annika/geteilt:/usr/geteilt")
+//				.appendBinds(activeProject.getContainerDir() + ":/tessla")
+//				.build();
 
 //		docker.pull("busybox");
 		
-		final ContainerConfig containerConfig = ContainerConfig.builder()
-			    .hostConfig(hostConfig)
-			    .image("tessla").exposedPorts(ports)
-			    //-rm
-//			    .cmd("--volume", host_dir + ":/tessla", "-w", "/tessla", "-tid", "--name", "tessla", "tessla", "sh")
-//			    .cmd("-w", "/tessla", "-tid", "--name", "tessla", "tessla", "sh")
-//			    .cmd("-tid", "--name", "tessla", "tessla", "sh")
-//			    .cmd("-tid", "tessla", "sh")
-			    .cmd("sh", "-c", "while :; do sleep 1; done")
-			    //wenn man die working dir setzt gehts iwie nicht mehr
-			    .workingDir("/tessla")
-//			    .cmd(args)
-			    .build();
+//		final ContainerConfig containerConfig = ContainerConfig.builder()
+//			    .hostConfig(hostConfig)
+//			    .image("tessla").exposedPorts(ports)
+//			    //-rm
+////			    .cmd("--volume", host_dir + ":/tessla", "-w", "/tessla", "-tid", "--name", "tessla", "tessla", "sh")
+////			    .cmd("-w", "/tessla", "-tid", "--name", "tessla", "tessla", "sh")
+////			    .cmd("-tid", "--name", "tessla", "tessla", "sh")
+////			    .cmd("-tid", "tessla", "sh")
+//			    .cmd("sh", "-c", "while :; do sleep 1; done")
+//			    //wenn man die working dir setzt gehts iwie nicht mehr
+//			    .workingDir("/tessla")
+////			    .cmd(args)
+//			    .build();
 	
 		
 
 		
-//		final ContainerCreation creation = docker.createContainer(containerConfig);
-		final ContainerCreation creation = docker.createContainer(containerConfig, "tessla");
-		final String id = creation.id();
-		this.containerId = id;
-		
-		// Inspect container
-		final ContainerInfo info = docker.inspectContainer(id);
-
-		System.out.println("info: " + info);
-		// geht in Linux iwie nicht, funktioniert nur auf Windows. Ka warum
-//		Volume volumes = docker.inspectVolume(id);
-//		System.out.println("volumes: " + volumes);
-		
-		// Start container
-		docker.startContainer(id);
-	
-	
-	}
-	
-	public void runDockerCommand(String[] command) throws DockerCertificateException, FileNotFoundException, IOException, DockerException, InterruptedException {
-		runDockerCommand(command, false);
-	}
-	
-	public void runDockerCommand(String[] command, boolean logOn) throws DockerCertificateException, FileNotFoundException, IOException, DockerException, InterruptedException {
-
-
-		// Exec command inside running container with attached STDOUT and STDERR
-//		final String[] command = {"bash", "-c", "ls"};
-//		String[] command = getBuildAssemblyArgs();
-		final ExecCreation execCreation = docker.execCreate(
-			containerId, command, DockerClient.ExecCreateParam.attachStdout(),
-		    DockerClient.ExecCreateParam.attachStderr());
-		
-		
-		final LogStream output = docker.execStart(execCreation.id());
-		
-		if(logOn){
-			final String execOutput = output.readFully();
-			System.out.println("execOutput: " + execOutput);
-		}
-
-		
-//		// Kill container
-//		docker.killContainer(id);
+////		final ContainerCreation creation = docker.createContainer(containerConfig);
+//		final ContainerCreation creation = docker.createContainer(containerConfig, "tessla");
+//		final String id = creation.id();
+//		this.containerId = id;
 //		
-//		// Remove container
-//		docker.removeContainer(id);
+//		// Inspect container
+//		final ContainerInfo info = docker.inspectContainer(id);
 //
-//		// Close the docker client
-//		docker.close();
-	}
+//		System.out.println("info: " + info);
+//		// geht in Linux iwie nicht, funktioniert nur auf Windows. Ka warum
+////		Volume volumes = docker.inspectVolume(id);
+////		System.out.println("volumes: " + volumes);
+//		
+//		// Start container
+//		docker.startContainer(id);
 	
-	public void runDockerCommand2(String command){
-		try {
-			Runtime rt = Runtime.getRuntime();
-//			Process proc = rt.exec("gksudo docker exec tessla " + command);
-			Process proc = rt.exec("docker exec tessla " + command);
-			
-			System.out.println("run: " + "docker exec tessla " + command);
-			
-			BufferedReader stdInput = new BufferedReader(new 
-			     InputStreamReader(proc.getInputStream()));
-
-			BufferedReader stdError = new BufferedReader(new 
-			     InputStreamReader(proc.getErrorStream()));
-
-//			// read the output from the command
-//			System.out.println("Here is the standard output of the command:\n");
-			String s = null;
-			while ((s = stdInput.readLine()) != null) {
-//			    System.out.println(s);
-			}
-
-			// read any errors from the attempted command
-//			System.out.println("Here is the standard error of the command (if any):\n");
-			while ((s = stdError.readLine()) != null) {
-			    System.out.println(s);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
 	}
+
 	
 
-	public void runDockerCommandCat() {
-		try {
-			String command = "docker exec tessla cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla";
-//			docker run --volume $(pwd):/tessla --rm tessla sh -c 'cd /tessla && cat /usr/local/opt/tessla_rv/streams.tessla spec.tessla > spec2.tessla'
-//			String command = "docker exec tessla sh -c 'cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla'";
-//			String command = "docker exec tessla sh 'cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla'";
-//			String command = "docker exec tessla -c 'cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla'";
-//			String command = "docker exec tessla 'cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla'";
-			
-			
-			Runtime rt = Runtime.getRuntime();
-//			Process proc = rt.exec("gksudo docker exec tessla " + command);
-			Process proc = rt.exec(command);
-			
-			System.out.println("run: " + command);
-			
-			BufferedReader stdInput = new BufferedReader(new 
-			     InputStreamReader(proc.getInputStream()));
-
-			BufferedReader stdError = new BufferedReader(new 
-			     InputStreamReader(proc.getErrorStream()));
-
-//			// read the output from the command
-//			System.out.println("Here is the standard output of the command:\n");
-			String s = null;
-			while ((s = stdInput.readLine()) != null) {
-//			    System.out.println(s);
-			}
-
-			// read any errors from the attempted command
-//			System.out.println("Here is the standard error of the command (if any):\n");
-			while ((s = stdError.readLine()) != null) {
-			    System.out.println(s);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void runDockerCommandAvoidingWordSplitting2(String[] command) {
+		runCommand((String[]) ArrayUtils.addAll(new String[] {"docker", "exec", "tessla"}, command));
 	}
-	
-	/**
-	 * Stoppt den container und startet ihn dann mit dem allergleichen befehl wie aus der doku
-	 */
-	public void runDockerCommandCat2(TeSSLaProject activeProject) {
-			
-		try {
-			// Stop the container
-			String stop_command = "docker stop tessla";
-			runCommand(stop_command);
 
-			Thread.sleep(3000);
-
-			// Stop and delete the container
-			// This deletes the container, not the image. That would be rmi
-			String remove_command = "docker rm -f tessla";
-			runCommand(remove_command);
-
-			Thread.sleep(3000);
-
-			// String command = "docker exec tessla cat spec.tessla
-			// /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla";
-			String command = "docker run --volume " + activeProject.getContainerDir()
-					+ ":/tessla --rm tessla sh -c 'cd /tessla && cat /usr/local/opt/tessla_rv/streams.tessla spec.tessla > spec2.tessla'";
-			System.out.println("--DockerService: run AddStandardLibrary: " + command);
-			runCommand(command);
-			//gibt fehler:
-			// /tessla: 1: /tessla: Syntax error: Unterminated quoted string
-			
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-			
-	}
-	
-	public void runDockerCommandRunTessla(TeSSLaProject activeProject) {
-		
-		try {
-			// Stop the container
-			String stop_command = "docker stop tessla";
-			runCommand(stop_command);
-
-			Thread.sleep(3000);
-
-			// Stop and delete the container
-			// This deletes the container, not the image. That would be rmi
-			String remove_command = "docker rm -f tessla";
-			runCommand(remove_command);
-
-			Thread.sleep(3000);
-
-			// String command = "docker exec tessla cat spec.tessla
-			// /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla";
-			String command = "gksudo docker run --volume " + activeProject.getContainerDir()
-					+ ":/tessla --rm tessla sh -c 'cd /tessla && tessla spec2.tessla traces.log'";
-			System.out.println("--DockerService: runDockerCommandRunTessla: " + command);
-//			runCommand(command);
-			
-			List<String> args = new ArrayList<String>();
-			args.addAll(Arrays.asList("docker", "run", "--volume", activeProject.getContainerDir() + ":/tessla", "--rm", "tessla", "sh", "-c", "cd /tessla && tessla spec2.tessla traces.log"));
-			
-			String[] argsArray = new String[args.size()];
-			argsArray = args.toArray(argsArray);
-			
-			runCommand(argsArray);
-			//gibt fehler:
-			// /tessla: 1: /tessla: Syntax error: Unterminated quoted string
-			
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-			
-	}
-	
 	/**
 	 * This avoids Words Splitting in console
 	 * @param activeProject
 	 */
-	public void runDockerCommandAvoidingWordSplitting2(String[] command) {
+	private void runCommand(String[] command) {
 		try {
 			
-			String[] finalCommand = (String[]) ArrayUtils.addAll(new String[] {"docker", "exec", "tessla"}, command);
-			Runtime rt = Runtime.getRuntime();
-			Process proc = rt.exec(finalCommand);
-			
-			BufferedReader stdInput = new BufferedReader(new 
-			     InputStreamReader(proc.getInputStream()));
-
-			BufferedReader stdError = new BufferedReader(new 
-			     InputStreamReader(proc.getErrorStream()));
-
-			// read the output from the command
-			String s = null;
-			while ((s = stdInput.readLine()) != null) {
-			    System.out.println(s);
-			}
-
-			// read any errors from the attempted command
-			while ((s = stdError.readLine()) != null) {
-			    System.out.println(s);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private void runCommand(String command){
-		try {
 			Runtime rt = Runtime.getRuntime();
 			Process proc = rt.exec(command);
 			
@@ -363,133 +184,8 @@ public class DockerService2 {
 		}
 	}
 	
-	private void runCommand(String[] command){
-		try {
-			Runtime rt = Runtime.getRuntime();
-			Process proc = rt.exec(command);
-			
-			BufferedReader stdInput = new BufferedReader(new 
-			     InputStreamReader(proc.getInputStream()));
-
-			BufferedReader stdError = new BufferedReader(new 
-			     InputStreamReader(proc.getErrorStream()));
-
-			// read the output from the command
-			String s = null;
-			while ((s = stdInput.readLine()) != null) {
-			    System.out.println(s);
-			}
-
-			// read any errors from the attempted command
-			while ((s = stdError.readLine()) != null) {
-			    System.out.println(s);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 	
-	public void runDockerCommand3(String command){
-		try {
-			Runtime rt = Runtime.getRuntime();
-			Process proc = rt.exec("gksudo docker exec tessla " + command);
-			
-			BufferedReader stdInput = new BufferedReader(new 
-			     InputStreamReader(proc.getInputStream()));
 
-			BufferedReader stdError = new BufferedReader(new 
-			     InputStreamReader(proc.getErrorStream()));
-
-//			// read the output from the command
-//			System.out.println("Here is the standard output of the command:\n");
-			String s = null;
-			while ((s = stdInput.readLine()) != null) {
-			    System.out.println(s);
-			}
-
-			// read any errors from the attempted command
-//			System.out.println("Here is the standard error of the command (if any):\n");
-			while ((s = stdError.readLine()) != null) {
-			    System.out.println(s);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * schreibt noch das tessla.json raus
-	 * @param command
-	 */
-	public void runCommandForBuildTeSSLa(String command, TeSSLaProject activeProject){
-		try {
-			Runtime rt = Runtime.getRuntime();
-//			Process proc = rt.exec("gksudo docker exec tessla " + command);
-			Process proc = rt.exec("docker exec tessla " + command);
-			
-			BufferedReader stdInput = new BufferedReader(new 
-			     InputStreamReader(proc.getInputStream()));
-
-			BufferedReader stdError = new BufferedReader(new 
-			     InputStreamReader(proc.getErrorStream()));
-
-//			// read the output from the command
-//			System.out.println("Here is the standard output of the command:\n");
-			String s = null;
-			StringBuilder sb = new StringBuilder();
-			while ((s = stdInput.readLine()) != null) {
-			    System.out.println(s);;
-			    sb.append(s);
-			    sb.append("\n");
-			}
-			createTeSSLaJson(sb.toString(), activeProject);
-			// read any errors from the attempted command
-//			System.out.println("Here is the standard error of the command (if any):\n");
-			while ((s = stdError.readLine()) != null) {
-			    System.out.println(s);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private void createTeSSLaJson(String stdout, TeSSLaProject activeProject){
-//	     // check for compiler errors
-//	      if (stdout.charAt(0) == '{') {
-//	        // cut trailing comma
-//	        //
-//	        // Why the hell the compiler puts an trailing ',' to the string?? should
-//	        // actually be fixed in the compiler binary not in this package!!!!
-//	        if (stdout.charAt(stdout.length - 2) == ',') {
-//	          stdout = stdout.slice(0, -2) + '\n'
-//	        }
-//
-//	        // here we know the compilation process was successful so write content to file
-//	        fs.writeFileSync(path.join(this.containerBuild, 'instrumented_' + this.activeProject.binName + '.tessla.json'), stdout)
-//	      }
-		
-//	     // check for compiler errors
-	      if (stdout.charAt(0) == '{') {
-		        // Why the hell the compiler puts an trailing ',' to the string?? should
-		        // actually be fixed in the compiler binary not in this package!!!!
-		        if (stdout.charAt(stdout.length() - 2) == ',') {
-		          stdout = stdout.substring(0, -2) + "\n";
-		        }
-		        // here we know the compilation process was successful so write content to file
-				try {
-					FileUtils.writeStringToFile(new File(activeProject.getContainerDir() + "/build/" + "instrumented_" + activeProject.getBinName() + ".tessla.json"), stdout);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-	      }else{
-	    	  System.out.println("Error");
-	      }
-	}
 	
 	public void removeContainer() throws DockerException, InterruptedException{
 		

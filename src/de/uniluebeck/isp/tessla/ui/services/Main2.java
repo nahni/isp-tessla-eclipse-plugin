@@ -33,8 +33,7 @@ public class Main2 {
 		
 		DockerService2 dockerSerivce = new DockerService2();
 		dockerSerivce.startDocker(activeProject);
-		
-//		dockerSerivce.removeContainer();
+
 		
 		Thread.sleep(3000);
 		
@@ -68,6 +67,10 @@ public class Main2 {
 		//docker exec tessla sh -c cd /tessla && tessla spec2.tessla traces.log
 		String[] runTeSSLa_Args = commandArgsService.getRunTeSSLa_Args();
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(runTeSSLa_Args);
+		
+		
+//		Thread.sleep(3000);		
+//		dockerSerivce.removeContainer();
 		
 		
 	}

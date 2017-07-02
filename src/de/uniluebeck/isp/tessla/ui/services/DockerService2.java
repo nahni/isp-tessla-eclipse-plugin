@@ -65,20 +65,14 @@ public class DockerService2 {
 	}
 	
 	
-
 	
-	public void removeContainer() throws DockerException, InterruptedException{
-		
-		Thread.sleep(3000);
-		
+	public void stopContainer() throws DockerException, InterruptedException{
 		// Kill container
-//		docker.killContainer(containerId);
+		String[] argsArray = new String[] {"docker", "stop", "tessla"};
+		runCommand(argsArray);
 		
 		// Remove container
-//		docker.removeContainer(containerId);
-
-		// Close the docker client
-//		docker.close();
+		runCommand(new String[] {"docker", "rm", "tessla"});
 	}
 
 	

@@ -14,10 +14,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 
 
 public class TeSSLaFileManager {
 
+	final static Logger logger = Logger.getLogger(TeSSLaFileManager.class);
+	
 	public static void main(String[] args) {
 		String sourceFile = "C:/Annika/Studium/3 Semester/SSE Projekt/TeSSLa Plugin/Dateien zum ausprobieren/dummyProjectPath/sub_add_alternation/foo.c";
 //		String sourceFile = "spec.tessla";
@@ -33,6 +36,7 @@ public class TeSSLaFileManager {
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			logger.error("failed", e);
 			e.printStackTrace();
 		}
 	}

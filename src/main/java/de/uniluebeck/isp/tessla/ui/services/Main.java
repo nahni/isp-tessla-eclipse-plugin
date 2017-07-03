@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.exceptions.DockerException;
@@ -15,6 +16,8 @@ import de.uniluebeck.isp.tessla.model.TeSSLaProject;
 
 public class Main {
 
+	final static Logger logger = Logger.getLogger(Main.class);
+	
 	private final static String PROJECT_PATH = "/home/annika/Entwicklung/Spielwiese/dummyProjectPath3/sub_add_alternation";
 
 	private final static String OUTPUT_DIR = "";
@@ -29,6 +32,7 @@ public class Main {
 	}
 	
 	public void run() throws FileNotFoundException, DockerCertificateException, IOException, DockerException, InterruptedException{
+		
 		activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
 		
 		DockerService dockerSerivce = new DockerService();

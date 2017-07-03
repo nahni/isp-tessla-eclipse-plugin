@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.log4j.Logger;
 
 import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.exceptions.DockerException;
@@ -14,6 +15,9 @@ import de.uniluebeck.isp.tessla.model.TeSSLaProject;
 
 public class DockerService {
 
+	final static Logger logger = Logger.getLogger(DockerService.class);
+	
+	
 	public void startDocker(TeSSLaProject activeProject) throws DockerCertificateException, FileNotFoundException, IOException, DockerException, InterruptedException{
 		
 		String host_dir = activeProject.getContainerDir();
@@ -57,8 +61,7 @@ public class DockerService {
 			    System.out.println(s);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Docker command could not run successfully", e);
 		}
 	}
 	

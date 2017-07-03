@@ -9,12 +9,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 import de.uniluebeck.isp.tessla.model.TeSSLaProject;
 import de.uniluebeck.isp.tessla.util.WorkingDirFileFilter;
 
 public class WorkingDirFileService {
 
+	final static Logger logger = Logger.getLogger(WorkingDirFileService.class);
+	
 	private TeSSLaProject activeProject;
 	
 	public WorkingDirFileService(TeSSLaProject activeProject){
@@ -30,8 +33,7 @@ public class WorkingDirFileService {
 		try {
 			Files.createDirectories(path);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("working directory could not be created", e);
 		}
 	}
 	
@@ -48,8 +50,7 @@ public class WorkingDirFileService {
 			FileUtils.copyDirectory(src, dest, new WorkingDirFileFilter());
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("files from working directory couldn't be copied to container directory", e);
 		}
 		
 	}
@@ -102,17 +103,11 @@ public class WorkingDirFileService {
 			FileUtils.writeStringToFile(new File(this.activeProject.getContainerDir() + "/build/" + "zlog.conf"), formats + rules);
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("zlog-File could not be created", e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("zlog-File could not be created", e);
 		}
-		
 	}
-	
-	
-	
 	
 }
  

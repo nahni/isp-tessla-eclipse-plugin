@@ -1,0 +1,6 @@
+{
+	"execPath": "/usr/bin/clang",
+	"gccDefaultCFlags": "-Wall -c -fsyntax-only",
+	"gccIncludePaths": ".,./include,./path",
+	"gccSuppressWarnings": false
+}

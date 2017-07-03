@@ -16,6 +16,7 @@ import de.uniluebeck.isp.tessla.model.TeSSLaProject;
 import de.uniluebeck.isp.tessla.ui.services.AssemblyService;
 import de.uniluebeck.isp.tessla.ui.services.CCodeBuildService;
 import de.uniluebeck.isp.tessla.ui.services.DockerService;
+import de.uniluebeck.isp.tessla.ui.services.Main;
 import de.uniluebeck.isp.tessla.ui.services.PatchedBinaryService;
 import de.uniluebeck.isp.tessla.ui.services.TeSSLaService;
 
@@ -110,6 +111,15 @@ public class BuildAndRunHandler extends AbstractHandler {
 //	      buildAssembly: true
 //	    })		
 		
+		//TODO
+		Main main = new Main();
+		main.copyFiles();
+//		main.run();
+		
+		//TODO
+		DockerService dockerSerivce = new DockerService();
+		dockerSerivce.startDocker(activeProject);
+		
 		System.out.println("onBuildCCode");
 		CCodeBuildService cCodeBuilder = new CCodeBuildService(activeProject);
 		cCodeBuilder.buildCCode();
@@ -131,5 +141,8 @@ public class BuildAndRunHandler extends AbstractHandler {
 		
 		System.out.println("RunTeSSLa");
 		teSSLaService.runTeSSLa();
+		
+		//TODO
+		dockerSerivce.stopContainer();
 	}
 }

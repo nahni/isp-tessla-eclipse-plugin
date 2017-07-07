@@ -18,26 +18,20 @@ public class Main {
 
 	final static Logger logger = Logger.getLogger(Main.class);
 	
-	private final static String PROJECT_PATH = "/home/annika/Entwicklung/Spielwiese/dummyProjectPath3/sub_add_alternation";
-
-	private final static String OUTPUT_DIR = "";
-	private final static String BIN_NAME = "";
-	
 	TeSSLaProject activeProject;
 	
 	public static void main(String[] args) throws FileNotFoundException, DockerCertificateException, IOException, DockerException, InterruptedException {
 		Main main = new Main();
 		main.copyFiles();
 		main.run();
+		
 	}
 	
 	public void run() throws FileNotFoundException, DockerCertificateException, IOException, DockerException, InterruptedException{
 		
-		activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
+		activeProject = new TeSSLaProject();
 		
-		DockerService dockerSerivce = new DockerService();
-		dockerSerivce.startDocker(activeProject);
-
+		DockerService dockerSerivce = new DockerService(activeProject);
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
 		
 		String[] compileToLLVM_BC_Args = commandArgsService.getCompileToLLVM_BC_Args();
@@ -59,12 +53,12 @@ public class Main {
 		String[] runTeSSLa_Args = commandArgsService.getRunTeSSLa_Args();
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(runTeSSLa_Args);
 		
-		
-		dockerSerivce.stopContainer();
+//		
+//		dockerSerivce.stopContainer();
 	}
 	
 	public void copyFiles(){
-		activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
+		activeProject = new TeSSLaProject();
 		
 		//iwie sollte das wo anders hin oder die Methode umbeannt werden
 		WorkingDirFileService workingDirFileService = new WorkingDirFileService(activeProject);

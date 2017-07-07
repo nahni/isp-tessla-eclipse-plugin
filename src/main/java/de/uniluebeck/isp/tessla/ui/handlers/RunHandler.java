@@ -24,7 +24,7 @@ public class RunHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
-		activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
+		activeProject = new TeSSLaProject();
 		
 //		Command command = event.getCommand();
 //		command.getId();

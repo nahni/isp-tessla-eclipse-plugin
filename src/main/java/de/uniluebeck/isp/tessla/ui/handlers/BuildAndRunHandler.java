@@ -36,7 +36,7 @@ public class BuildAndRunHandler extends AbstractHandler {
 	
 	
 	public BuildAndRunHandler(){
-		activeProject = new TeSSLaProject(PROJECT_PATH, OUTPUT_DIR, BIN_NAME);
+		activeProject = new TeSSLaProject();
 	}
 	
 	@Override
@@ -117,8 +117,8 @@ public class BuildAndRunHandler extends AbstractHandler {
 //		main.run();
 		
 		//TODO
-		DockerService dockerSerivce = new DockerService();
-		dockerSerivce.startDocker(activeProject);
+		DockerService dockerSerivce = new DockerService(activeProject);
+		dockerSerivce.startDocker();
 		
 		System.out.println("onBuildCCode");
 		CCodeBuildService cCodeBuilder = new CCodeBuildService(activeProject);

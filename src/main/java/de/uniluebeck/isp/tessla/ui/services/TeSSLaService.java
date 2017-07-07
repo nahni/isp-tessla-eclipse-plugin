@@ -15,7 +15,7 @@ public class TeSSLaService {
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
 		String[] addStandardLibrary_Args = commandArgsService.getAddStandardLibrary_Args();
 		
-		DockerService dockerSerivce = new DockerService();
+		DockerService dockerSerivce = new DockerService(activeProject);
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(addStandardLibrary_Args);
 	}
 	
@@ -24,7 +24,7 @@ public class TeSSLaService {
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
 		String[] runTeSSLa_Args = commandArgsService.getRunTeSSLa_Args();
 		
-		DockerService dockerSerivce = new DockerService();
+		DockerService dockerSerivce = new DockerService(activeProject);
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(runTeSSLa_Args);
 	}
 }

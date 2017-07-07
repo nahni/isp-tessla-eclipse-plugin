@@ -15,7 +15,7 @@ public class PatchedBinaryService {
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
 		String[] runBinary_Args = commandArgsService.getRunBinary_Args();
 
-		DockerService dockerSerivce = new DockerService();
+		DockerService dockerSerivce = new DockerService(activeProject);
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(runBinary_Args);
 
 		// TODO: wo kommt auf einmal das Trace-File her? Das wurde vorher hier erstellt.

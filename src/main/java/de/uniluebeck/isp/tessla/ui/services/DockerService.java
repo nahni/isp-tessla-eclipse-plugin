@@ -1,24 +1,29 @@
 package de.uniluebeck.isp.tessla.ui.services;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.exceptions.DockerException;
 
+import de.uniluebeck.isp.tessla.model.ProcessOutput;
 import de.uniluebeck.isp.tessla.model.TeSSLaProject;
 
 public class DockerService {
 
 	final static Logger logger = Logger.getLogger(DockerService.class);
 	
+	TeSSLaProject activeProject;
 	
-	public void startDocker(TeSSLaProject activeProject) throws DockerCertificateException, FileNotFoundException, IOException, DockerException, InterruptedException{
+	public DockerService(TeSSLaProject activeProject){
+		this.activeProject = activeProject;
+	}
+	
+	public void startDocker() {
 		
 		String host_dir = activeProject.getContainerDir();
 		String tesslaFilePath = "/home/annika/Entwicklung/Files/tessla2-docker";
@@ -33,6 +38,7 @@ public class DockerService {
 	
 
 	public void runDockerCommandAvoidingWordSplitting2(String[] command) {
+		checkIfContainerIsRunning();
 		runCommand((String[]) ArrayUtils.addAll(new String[] {"docker", "exec", "tessla"}, command));
 	}
 
@@ -40,7 +46,7 @@ public class DockerService {
 	 * This avoids Words Splitting in console
 	 * @param activeProject
 	 */
-	private void runCommand(String[] command) {
+	private ProcessOutput runCommand(String[] command) {
 		try {
 			
 			Runtime rt = Runtime.getRuntime();
@@ -51,18 +57,33 @@ public class DockerService {
 			BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 
 			// read the output from the command
-			String s = null;
-			while ((s = stdInput.readLine()) != null) {
-			    System.out.println(s);
+			String s1 = null;
+			StringBuilder input = new StringBuilder();
+			while ((s1 = stdInput.readLine()) != null) {
+				input.append(s1);
 			}
-
+			
+			s1 = null;
+			StringBuilder error = new StringBuilder();
 			// read any errors from the attempted command
-			while ((s = stdError.readLine()) != null) {
-			    System.out.println(s);
+			while ((s1 = stdError.readLine()) != null) {
+			    error.append(s1);
 			}
+			
+			if(StringUtils.isNotBlank(input.toString())){
+				System.out.println(input.toString());
+			}
+			
+			if(StringUtils.isNotBlank(error.toString())){
+				System.out.println(error.toString());
+			}
+			return new ProcessOutput(input.toString(), error.toString());
+			
 		} catch (IOException e) {
 			logger.error("Docker command could not run successfully", e);
 		}
+		
+		return null;
 	}
 	
 	
@@ -74,6 +95,15 @@ public class DockerService {
 		
 		// Remove container
 		runCommand(new String[] {"docker", "rm", "tessla"});
+	}
+	
+	public void checkIfContainerIsRunning() {
+		//docker ps -q -f name=tessla
+		ProcessOutput output = runCommand(new String[] {"docker", "ps", "-q", "-f", "name=tessla"});
+		
+		if(StringUtils.isBlank(output.getInfo())){
+			startDocker();
+		}
 	}
 
 	

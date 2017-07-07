@@ -14,7 +14,7 @@ public class CCodeBuildService {
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
 		String[] compileToLLVM_BC_Args = commandArgsService.getCompileToLLVM_BC_Args();
 		
-		DockerService dockerSerivce = new DockerService();
+		DockerService dockerSerivce = new DockerService(activeProject);
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(compileToLLVM_BC_Args);
 	}
 }

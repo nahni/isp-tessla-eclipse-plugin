@@ -15,7 +15,7 @@ public class AssemblyService {
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
 		String[] instrument_BC_Args = commandArgsService.getInstrument_BC_Args();
 		
-		DockerService dockerSerivce = new DockerService();
+		DockerService dockerSerivce = new DockerService(activeProject);
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(instrument_BC_Args);
 	}
 	
@@ -24,7 +24,7 @@ public class AssemblyService {
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
 		String[] compileToBinary_Args = commandArgsService.getCompileToBinary_Args();
 		
-		DockerService dockerSerivce = new DockerService();
+		DockerService dockerSerivce = new DockerService(activeProject);
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(compileToBinary_Args);
 	}
 }

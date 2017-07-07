@@ -7,22 +7,19 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import de.uniluebeck.isp.tessla.util.FileFilter;
+import org.eclipse.core.resources.ResourcesPlugin;
 
 public class TeSSLaProject {
 
-	private String projectPath;
 	private String outputDir;
 	private String binName;
 	
-	public TeSSLaProject(String projectPath, String outputDir, String binName){
-		this.projectPath = projectPath;
-		this.outputDir = outputDir;
-		this.binName = binName;
+	public TeSSLaProject(){
 	}
 	
 	public List<File> getCFiles(){
 		FileFilter filter = new FileFilter();
-		File[] files = filter.find(projectPath, ".c");
+		File[] files = filter.find(getProjectPath(), ".c");
 		
 		if(files == null || files.length == 0){
 			return null;
@@ -33,7 +30,7 @@ public class TeSSLaProject {
 	
 	public List<File> getTeSSLaFiles(){
 		FileFilter filter = new FileFilter();
-		File[] files = filter.find(projectPath, ".tessla");
+		File[] files = filter.find(getProjectPath(), ".tessla");
 		
 		if(files == null || files.length == 0){
 			return null;
@@ -43,11 +40,11 @@ public class TeSSLaProject {
 	}
 	
 	public String getProjectPath() {
+//		geht das nur im Plugin? So wirfts nen Fehler: Workspace is closed.
+//		projectPath = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
+//		System.out.println(projectPath);
+		String projectPath = "/home/annika/Entwicklung/Spielwiese/dummyProjectPath3/sub_add_alternation";
 		return projectPath;
-	}
-	
-	public void setProjectPath(String projectPath) {
-		this.projectPath = projectPath;
 	}
 	
 	public String getOutputDir() {
@@ -69,7 +66,7 @@ public class TeSSLaProject {
 //      path.basename('/foo/bar/baz/asdf/quux.html');
 //      Returns: 'quux.html'
 //    this.binName = path.basename(this.projPath).replace(' ', '_')
-			String project = this.projectPath;
+			String project = getProjectPath();
 			if(project.endsWith("/")){
 				project = project.substring(0, project.length() - 1);
 			}

@@ -149,5 +149,10 @@
          </toolbar>
       </menuContribution>
    </extension>
-
+   <extension point="org.eclipse.ui.preferencePages">
+      <page name="TeSSLa"
+        class="de.uniluebeck.isp.tessla.ui.TesslaPreferencePage"
+        id="de.uniluebeck.isp.tessla.ui.preference.page">
+      </page>
+   </extension>
 </plugin>

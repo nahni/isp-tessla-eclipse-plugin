@@ -49,7 +49,8 @@ Bundle-ClassPath: lib/commons-lang-2.6.jar,
 Bundle-Activator: de.uniluebeck.isp.tessla.ui.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.junit
+ org.junit,
+ org.eclipse.core.resources;bundle-version="3.11.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.fasterxml.jackson.annotation,

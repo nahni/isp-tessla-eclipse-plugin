@@ -11,12 +11,23 @@ import org.eclipse.core.resources.ResourcesPlugin;
 
 public class TeSSLaProject {
 
+	private String containerDir;
+	private String dockerFile;
 	private String outputDir;
 	private String binName;
 	
 	public TeSSLaProject(){
 	}
 	
+	public TeSSLaProject(String containerDir, String pathToDockerFile){
+		this.containerDir = containerDir;
+		this.dockerFile = pathToDockerFile;
+	}
+	
+	public String getDockerFile() {
+		return dockerFile;
+	}
+
 	public List<File> getCFiles(){
 		FileFilter filter = new FileFilter();
 		File[] files = filter.find(getProjectPath(), ".c");
@@ -43,8 +54,7 @@ public class TeSSLaProject {
 //		geht das nur im Plugin? So wirfts nen Fehler: Workspace is closed.
 //		projectPath = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
 //		System.out.println(projectPath);
-//		String projectPath = "/home/annika/Entwicklung/Spielwiese/dummyProjectPath3/sub_add_alternation";
-		String projectPath = "/media/fritzi/shared/Master/4. Semester/SSE Projekt/sub_add_alternation";
+		String projectPath = "/home/annika/Entwicklung/Spielwiese/dummyProjectPath3/sub_add_alternation";
 		return projectPath;
 	}
 	
@@ -88,8 +98,10 @@ public class TeSSLaProject {
 		//Das Eclipse muss im Moment als Admin gestratet werden, daher waere das ContainerDir
 		// root/.tessla zu Entwicklungszewecken hab ich das mal umgebogen
 //		return System.getProperty("user.home") + "/" + ".tessla-env";
-		
-//		return "/home/annika/.tessla-env";
-		return "/home/fritzi/.tessla-env";
+		if(StringUtils.isEmpty(containerDir)){
+			//TODO
+			this.containerDir = "/home/annika/.tessla-env";
+		}
+		return containerDir;
 	}
 }

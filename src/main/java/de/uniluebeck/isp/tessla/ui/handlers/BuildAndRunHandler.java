@@ -19,6 +19,7 @@ import de.uniluebeck.isp.tessla.ui.services.DockerService;
 import de.uniluebeck.isp.tessla.ui.services.Main;
 import de.uniluebeck.isp.tessla.ui.services.PatchedBinaryService;
 import de.uniluebeck.isp.tessla.ui.services.TeSSLaService;
+import de.uniluebeck.isp.tessla.util.PreferencesUtil;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -26,17 +27,13 @@ import de.uniluebeck.isp.tessla.ui.services.TeSSLaService;
  * @see org.eclipse.core.commands.AbstractHandler
  */
 public class BuildAndRunHandler extends AbstractHandler {
-
-	private final static String PROJECT_PATH = "/home/annika/Entwicklung/Spielwiese/dummyProjectPath3/sub_add_alternation";
-
-	private final static String OUTPUT_DIR = "";
-	private final static String BIN_NAME = "";
 	
 	TeSSLaProject activeProject;
 	
-	
 	public BuildAndRunHandler(){
-		activeProject = new TeSSLaProject();
+		
+		activeProject = PreferencesUtil.getTesslaProjectConfig();
+		
 	}
 	
 	@Override
@@ -116,6 +113,10 @@ public class BuildAndRunHandler extends AbstractHandler {
 		main.copyFiles();
 //		main.run();
 		
+		System.out.println("getContainerDir: " + activeProject.getContainerDir());
+		System.out.println("getDockerFile: " + activeProject.getDockerFile());
+		
+		
 		//TODO
 		DockerService dockerSerivce = new DockerService(activeProject);
 		dockerSerivce.startDocker();
@@ -145,4 +146,5 @@ public class BuildAndRunHandler extends AbstractHandler {
 		//TODO
 		dockerSerivce.stopContainer();
 	}
+	
 }

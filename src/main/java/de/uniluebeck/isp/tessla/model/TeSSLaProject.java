@@ -43,7 +43,8 @@ public class TeSSLaProject {
 //		geht das nur im Plugin? So wirfts nen Fehler: Workspace is closed.
 //		projectPath = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
 //		System.out.println(projectPath);
-		String projectPath = "/home/annika/Entwicklung/Spielwiese/dummyProjectPath3/sub_add_alternation";
+//		String projectPath = "/home/annika/Entwicklung/Spielwiese/dummyProjectPath3/sub_add_alternation";
+		String projectPath = "/media/fritzi/shared/Master/4. Semester/SSE Projekt/sub_add_alternation";
 		return projectPath;
 	}
 	
@@ -88,6 +89,7 @@ public class TeSSLaProject {
 		// root/.tessla zu Entwicklungszewecken hab ich das mal umgebogen
 //		return System.getProperty("user.home") + "/" + ".tessla-env";
 		
-		return "/home/annika/.tessla-env";
+//		return "/home/annika/.tessla-env";
+		return "/home/fritzi/.tessla-env";
 	}
 }

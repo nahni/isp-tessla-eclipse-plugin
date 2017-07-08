@@ -2,11 +2,6 @@ package de.uniluebeck.isp.tessla.ui.services;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.spotify.docker.client.exceptions.DockerCertificateException;

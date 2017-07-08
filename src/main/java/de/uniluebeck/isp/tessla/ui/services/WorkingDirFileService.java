@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import de.uniluebeck.isp.tessla.model.TeSSLaProject;
+import de.uniluebeck.isp.tessla.util.Constants;
 import de.uniluebeck.isp.tessla.util.WorkingDirFileFilter;
 
 public class WorkingDirFileService {
@@ -19,21 +20,32 @@ public class WorkingDirFileService {
 	final static Logger logger = Logger.getLogger(WorkingDirFileService.class);
 	
 	private TeSSLaProject activeProject;
+	private ConsoleService consoleService;
 	
 	public WorkingDirFileService(TeSSLaProject activeProject){
 		this.activeProject = activeProject;
+		this.consoleService = ConsoleService.getInstance();
+	}
+	
+	private void printStd(String text){
+		consoleService.writeTo(Constants.STDOUT_CONSOLE_NAME, text);
+	}
+	
+	private void printErr(String text){
+		consoleService.writeTo(Constants.ERR_CONSOLE_NAME, text);
 	}
 	
 	/**
 	 * Erstelt das Verzeichnis auf dem Host-Computer, das in den Docker-Container gemappt wird auf /tessla
 	 */
 	public void createWorkingDir(){
-		System.out.println("ContainerDir: " + activeProject.getContainerDir());
+		printStd("ContainerDir: " + activeProject.getContainerDir());
 		Path path = Paths.get(activeProject.getContainerDir());
 		try {
 			Files.createDirectories(path);
 		} catch (IOException e) {
 			logger.error("working directory could not be created", e);
+			printErr(e.getMessage());
 		}
 	}
 	
@@ -51,6 +63,7 @@ public class WorkingDirFileService {
 			
 		} catch (IOException e) {
 			logger.error("files from working directory couldn't be copied to container directory", e);
+			printErr("files from working directory couldn't be copied to container directory");
 		}
 		
 	}
@@ -104,8 +117,10 @@ public class WorkingDirFileService {
 			
 		} catch (FileNotFoundException e) {
 			logger.error("zlog-File could not be created", e);
+			printErr("zlog-File could not be created");
 		} catch (IOException e) {
 			logger.error("zlog-File could not be created", e);
+			printErr("zlog-File could not be created");
 		}
 	}
 	

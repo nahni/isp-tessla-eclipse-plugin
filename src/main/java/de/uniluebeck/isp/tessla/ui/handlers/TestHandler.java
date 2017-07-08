@@ -4,11 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.exceptions.DockerException;
@@ -17,43 +14,42 @@ import de.uniluebeck.isp.tessla.model.TeSSLaProject;
 import de.uniluebeck.isp.tessla.ui.services.CommandArgsService;
 import de.uniluebeck.isp.tessla.ui.services.ConsoleService;
 import de.uniluebeck.isp.tessla.ui.services.DockerService;
+import de.uniluebeck.isp.tessla.ui.services.WorkingDirFileService;
 import de.uniluebeck.isp.tessla.util.Constants;
-import de.uniluebeck.isp.tessla.util.CopyFilesToContainer;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-
-/**
- * Our sample handler extends AbstractHandler, an IHandler base class.
- * @see org.eclipse.core.commands.IHandler
- * @see org.eclipse.core.commands.AbstractHandler
- */
-public class BuildAndRunAndAnalyzeHandler extends AbstractHandler {
-
-	TeSSLaProject activeProject;
-	private ConsoleService consoleService;
+public class TestHandler extends AbstractHandler {
 	
+	TeSSLaProject activeProject;
+	
+	private ConsoleService consoleService;
+
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		this.consoleService = ConsoleService.getInstance();
 		
-		printStd("Hello from BuildAndRunAndAnalyzeHandler");
+		this.consoleService = ConsoleService.getInstance();	
 		
-		this.activeProject = new TeSSLaProject();
+		printStd("Hello from TestHandler!");
 		
-		CopyFilesToContainer copyClass = new CopyFilesToContainer();
-		copyClass.copyFiles(activeProject);
+		copyFiles();
+		printStd("copied files");
 		
 		try {
-			printStd("Build, run and analyze project...");
 			run();
+			printStd("run successful");
 		} catch (DockerCertificateException | IOException | DockerException | InterruptedException e) {
-			printErr(e.getMessage());
+			printStd(e.getMessage());
 		}
-
+		
 		return null;
 	}
 	
+	private void printStd(String text){
+		consoleService.writeTo(Constants.STDOUT_CONSOLE_NAME, text);
+	}
+	
 	private void run() throws FileNotFoundException, DockerCertificateException, IOException, DockerException, InterruptedException{
+		
+		activeProject = new TeSSLaProject();
 		
 		DockerService dockerSerivce = new DockerService(activeProject);
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
@@ -61,7 +57,7 @@ public class BuildAndRunAndAnalyzeHandler extends AbstractHandler {
 		String[] compileToLLVM_BC_Args = commandArgsService.getCompileToLLVM_BC_Args();
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(compileToLLVM_BC_Args);
 		
-		printStd("compiled");
+		System.out.println("compiled");
 		
 		String[] instrument_BC_Args = commandArgsService.getInstrument_BC_Args();
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(instrument_BC_Args);
@@ -83,11 +79,12 @@ public class BuildAndRunAndAnalyzeHandler extends AbstractHandler {
 //		dockerSerivce.stopContainer();
 	}
 	
-	private void printStd(String text){
-		consoleService.writeTo(Constants.STDOUT_CONSOLE_NAME, text);
-	}
-	
-	private void printErr(String text){
-		consoleService.writeTo(Constants.ERR_CONSOLE_NAME, text);
+	private void copyFiles(){
+		activeProject = new TeSSLaProject();
+		
+		//iwie sollte das wo anders hin oder die Methode umbeannt werden
+		WorkingDirFileService workingDirFileService = new WorkingDirFileService(activeProject);
+		workingDirFileService.createWorkingDir();
+		workingDirFileService.transferFilesToContainer();
 	}
 }

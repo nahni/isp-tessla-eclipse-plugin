@@ -12,22 +12,34 @@ import com.spotify.docker.client.exceptions.DockerException;
 
 import de.uniluebeck.isp.tessla.model.ProcessOutput;
 import de.uniluebeck.isp.tessla.model.TeSSLaProject;
+import de.uniluebeck.isp.tessla.util.Constants;
 
 public class DockerService {
 
 	final static Logger logger = Logger.getLogger(DockerService.class);
 	
 	TeSSLaProject activeProject;
+	private ConsoleService consoleService;
 	
 	public DockerService(TeSSLaProject activeProject){
 		this.activeProject = activeProject;
+		this.consoleService = ConsoleService.getInstance();
+	}
+	
+	private void printDocker(String text){
+		consoleService.writeTo(Constants.DOCKER_CONSOLE_NAME, text);
+	}
+	
+	private void printErr(String text){
+		consoleService.writeTo(Constants.ERR_CONSOLE_NAME, text);
 	}
 	
 	public void startDocker() {
 		
 		String host_dir = activeProject.getContainerDir();
-		String tesslaFilePath = "/home/annika/Entwicklung/Files/tessla2-docker";
-		
+//		String tesslaFilePath = "/home/annika/Entwicklung/Files/tessla2-docker";
+		String tesslaFilePath = "/media/fritzi/shared/Master/4. Semester/SSE Projekt/tessla2-docker";
+	
 		String[] loadArgsArray = new String[] {"docker", "load", "-i",tesslaFilePath};
 		runCommand(loadArgsArray);
 		
@@ -60,27 +72,28 @@ public class DockerService {
 			String s1 = null;
 			StringBuilder input = new StringBuilder();
 			while ((s1 = stdInput.readLine()) != null) {
-				input.append(s1);
+				input.append(s1+"\n");
 			}
 			
 			s1 = null;
 			StringBuilder error = new StringBuilder();
 			// read any errors from the attempted command
 			while ((s1 = stdError.readLine()) != null) {
-			    error.append(s1);
+			    error.append(s1+"\n");
 			}
 			
 			if(StringUtils.isNotBlank(input.toString())){
-				System.out.println(input.toString());
+				printDocker(input.toString());
 			}
 			
 			if(StringUtils.isNotBlank(error.toString())){
-				System.out.println(error.toString());
+				printErr(error.toString());
 			}
 			return new ProcessOutput(input.toString(), error.toString());
 			
 		} catch (IOException e) {
 			logger.error("Docker command could not run successfully", e);
+			printErr("DockerService: " + e.getMessage());
 		}
 		
 		return null;

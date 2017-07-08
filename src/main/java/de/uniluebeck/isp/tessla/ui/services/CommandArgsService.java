@@ -8,14 +8,25 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 
 import de.uniluebeck.isp.tessla.model.TeSSLaProject;
+import de.uniluebeck.isp.tessla.util.Constants;
 import de.uniluebeck.isp.tessla.util.FileUtil;
 
 public class CommandArgsService {
 
 	TeSSLaProject activeProject;
+	private ConsoleService consoleService;
 	
 	public CommandArgsService(TeSSLaProject activeProject){
 		this.activeProject = activeProject;
+		this.consoleService = ConsoleService.getInstance();
+	}
+	
+	private void printStd(String text){
+		consoleService.writeTo(Constants.STDOUT_CONSOLE_NAME, text);
+	}
+	
+	private void printErr(String text){
+		consoleService.writeTo(Constants.ERR_CONSOLE_NAME, text);
 	}
 	
 	public String[] getCompileToLLVM_BC_Args() {
@@ -44,7 +55,7 @@ public class CommandArgsService {
         for (String string : args) {
             command = command + " " + string;
         }
-        System.out.println("getCompileToLLVM_BC_Args: " + command);
+        printStd("getCompileToLLVM_BC_Args: " + command);
 		
 		String[] argsArray = new String[args.size()];
 		argsArray = args.toArray(argsArray);
@@ -66,7 +77,7 @@ public class CommandArgsService {
         for (String string : args) {
             command = command + " " + string;
         }
-        System.out.println("getInstrument_BC_Args: " + command);
+        printStd("getInstrument_BC_Args: " + command);
 		
 		String[] argsArray = new String[args.size()];
 		argsArray = args.toArray(argsArray);
@@ -91,7 +102,7 @@ public class CommandArgsService {
         for (String string : args) {
             command = command + " " + string;
         }
-        System.out.println("getCompileToBinary_Args: " + command);
+        printStd("getCompileToBinary_Args: " + command);
 		
 		String[] argsArray = new String[args.size()];
 		argsArray = args.toArray(argsArray);
@@ -114,7 +125,7 @@ public class CommandArgsService {
         for (String string : args) {
             command = command + " " + string;
         }
-        System.out.println("getRunBinary_Args: " + command);
+        printStd("getRunBinary_Args: " + command);
 		
 		String[] argsArray = new String[args.size()];
 		argsArray = args.toArray(argsArray);
@@ -134,7 +145,7 @@ public class CommandArgsService {
         for (String string : args) {
             command = command + " " + string;
         }
-        System.out.println("getAddStandardLibrary_Args: " + command);
+        printStd("getAddStandardLibrary_Args: " + command);
 		
 		String[] argsArray = new String[args.size()];
 		argsArray = args.toArray(argsArray);
@@ -152,7 +163,7 @@ public class CommandArgsService {
         for (String string : args) {
             command = command + " " + string;
         }
-        System.out.println("getRunTeSSLa_Args: " + command);
+        printStd("getRunTeSSLa_Args: " + command);
 		
 		String[] argsArray = new String[args.size()];
 		argsArray = args.toArray(argsArray);

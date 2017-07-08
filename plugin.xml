@@ -37,13 +37,31 @@
             name="Stop Command"
             categoryId="de.uniluebeck.isp.Tessla.ui.commands.category"
             id="de.uniluebeck.isp.Tessla.ui.commands.stopCommand">
-      </command>                
+      </command>     
+      <command
+            name="Test Command"
+            categoryId="de.uniluebeck.isp.Tessla.ui.commands.category"
+            id="de.uniluebeck.isp.Tessla.ui.commands.testCommand">
+      </command>   
+      <command
+            name="Console Test Command"
+            categoryId="de.uniluebeck.isp.Tessla.ui.commands.category"
+            id="de.uniluebeck.isp.Tessla.ui.commands.consoleTestCommand">
+      </command>          
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
             commandId="de.uniluebeck.isp.Tessla.ui.commands.sampleCommand"
             class="de.uniluebeck.isp.tessla.ui.handlers.SampleHandler">
+      </handler>
+      <handler
+            commandId="de.uniluebeck.isp.Tessla.ui.commands.testCommand"
+            class="de.uniluebeck.isp.tessla.ui.handlers.TestHandler">
+      </handler>
+      <handler
+            commandId="de.uniluebeck.isp.Tessla.ui.commands.consoleTestCommand"
+            class="de.uniluebeck.isp.tessla.ui.handlers.ConsoleTestHandler">
       </handler>
       <handler
             commandId="de.uniluebeck.isp.Tessla.ui.commands.runCommand"
@@ -87,6 +105,14 @@
                   commandId="de.uniluebeck.isp.Tessla.ui.commands.sampleCommand"
                   mnemonic="S"
                   id="de.uniluebeck.isp.Tessla.ui.menus.sampleCommand">
+            </command>
+            <command
+                  commandId="de.uniluebeck.isp.Tessla.ui.commands.testCommand"
+                  id="de.uniluebeck.isp.Tessla.ui.menus.testCommand">
+            </command>
+            <command
+                  commandId="de.uniluebeck.isp.Tessla.ui.commands.consoleTestCommand"
+                  id="de.uniluebeck.isp.Tessla.ui.menus.consoleTestCommand">
             </command>
             <command
                   commandId="de.uniluebeck.isp.Tessla.ui.commands.runCommand"
@@ -155,4 +181,11 @@
         id="de.uniluebeck.isp.tessla.ui.preference.page">
       </page>
    </extension>
+   <extension point="org.eclipse.ui.perspectives">
+   <perspective
+         name="Tessla"
+         class="de.uniluebeck.isp.tessla.ui.TesslaPerspective"
+         id="de.uniluebeck.isp.tessla.ui.perspective.tesslaPerspective">
+   </perspective>
+</extension>
 </plugin>

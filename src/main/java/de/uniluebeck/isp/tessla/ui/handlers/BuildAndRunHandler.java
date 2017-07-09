@@ -3,6 +3,8 @@ package de.uniluebeck.isp.tessla.ui.handlers;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -29,6 +31,14 @@ import de.uniluebeck.isp.tessla.util.PreferencesUtil;
 public class BuildAndRunHandler extends AbstractHandler {
 	
 	TeSSLaProject activeProject;
+	
+//	int launchCount;
+//
+//	@Inject
+//	public void setLaunchCount(
+//			@Preference(nodePath = "com.packtpub.e4.clock.ui", value = "launchCount") int launchCount) {
+//		this.launchCount = launchCount;
+//	}
 	
 	public BuildAndRunHandler(){
 		
@@ -110,41 +120,44 @@ public class BuildAndRunHandler extends AbstractHandler {
 		
 		//TODO
 		Main main = new Main();
-		main.copyFiles();
+//		main.copyFiles();
 //		main.run();
 		
 		System.out.println("getContainerDir: " + activeProject.getContainerDir());
 		System.out.println("getDockerFile: " + activeProject.getDockerFile());
 		
+		PreferencesUtil.probe2();
+		PreferencesUtil.probe3();
 		
-		//TODO
-		DockerService dockerSerivce = new DockerService(activeProject);
-		dockerSerivce.startDocker();
 		
-		System.out.println("onBuildCCode");
-		CCodeBuildService cCodeBuilder = new CCodeBuildService(activeProject);
-		cCodeBuilder.buildCCode();
-		
-		System.out.println("onPatchAssembly");
-		AssemblyService assemblyService = new AssemblyService(activeProject);
-		assemblyService.patchAssembly();
-		
-		System.out.println("onBuildAssembly");
-		assemblyService.buildAssembly();
-		
-		System.out.println("RunPatchedBinary");
-		PatchedBinaryService patchedBinaryService = new PatchedBinaryService(activeProject);
-		patchedBinaryService.runPatchedBinary();
-		
-		System.out.println("BuildTeSSLa");
-		TeSSLaService teSSLaService = new TeSSLaService(activeProject);
-		teSSLaService.addStandardLibrary();
-		
-		System.out.println("RunTeSSLa");
-		teSSLaService.runTeSSLa();
-		
-		//TODO
-		dockerSerivce.stopContainer();
+//		//TODO
+//		DockerService dockerSerivce = new DockerService(activeProject);
+//		dockerSerivce.startDocker();
+//		
+//		System.out.println("onBuildCCode");
+//		CCodeBuildService cCodeBuilder = new CCodeBuildService(activeProject);
+//		cCodeBuilder.buildCCode();
+//		
+//		System.out.println("onPatchAssembly");
+//		AssemblyService assemblyService = new AssemblyService(activeProject);
+//		assemblyService.patchAssembly();
+//		
+//		System.out.println("onBuildAssembly");
+//		assemblyService.buildAssembly();
+//		
+//		System.out.println("RunPatchedBinary");
+//		PatchedBinaryService patchedBinaryService = new PatchedBinaryService(activeProject);
+//		patchedBinaryService.runPatchedBinary();
+//		
+//		System.out.println("BuildTeSSLa");
+//		TeSSLaService teSSLaService = new TeSSLaService(activeProject);
+//		teSSLaService.addStandardLibrary();
+//		
+//		System.out.println("RunTeSSLa");
+//		teSSLaService.runTeSSLa();
+//		
+//		//TODO
+//		dockerSerivce.stopContainer();
 	}
 	
 }

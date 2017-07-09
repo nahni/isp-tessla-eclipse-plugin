@@ -120,44 +120,42 @@ public class BuildAndRunHandler extends AbstractHandler {
 		
 		//TODO
 		Main main = new Main();
-//		main.copyFiles();
+		main.copyFiles();
 //		main.run();
 		
+		activeProject = PreferencesUtil.getTesslaProjectConfig();
 		System.out.println("getContainerDir: " + activeProject.getContainerDir());
-		System.out.println("getDockerFile: " + activeProject.getDockerContainerPath());
-		
-		PreferencesUtil.probe2();
-		PreferencesUtil.probe3();
+		System.out.println("getDockerFile: " + activeProject.getDockerFile());
 		
 		
-//		//TODO
-//		DockerService dockerSerivce = new DockerService(activeProject);
-//		dockerSerivce.startDocker();
-//		
-//		System.out.println("onBuildCCode");
-//		CCodeBuildService cCodeBuilder = new CCodeBuildService(activeProject);
-//		cCodeBuilder.buildCCode();
-//		
-//		System.out.println("onPatchAssembly");
-//		AssemblyService assemblyService = new AssemblyService(activeProject);
-//		assemblyService.patchAssembly();
-//		
-//		System.out.println("onBuildAssembly");
-//		assemblyService.buildAssembly();
-//		
-//		System.out.println("RunPatchedBinary");
-//		PatchedBinaryService patchedBinaryService = new PatchedBinaryService(activeProject);
-//		patchedBinaryService.runPatchedBinary();
-//		
-//		System.out.println("BuildTeSSLa");
-//		TeSSLaService teSSLaService = new TeSSLaService(activeProject);
-//		teSSLaService.addStandardLibrary();
-//		
-//		System.out.println("RunTeSSLa");
-//		teSSLaService.runTeSSLa();
-//		
-//		//TODO
-//		dockerSerivce.stopContainer();
+		//TODO
+		DockerService dockerSerivce = new DockerService(activeProject);
+		dockerSerivce.startDocker();
+		
+		System.out.println("onBuildCCode");
+		CCodeBuildService cCodeBuilder = new CCodeBuildService(activeProject);
+		cCodeBuilder.buildCCode();
+		
+		System.out.println("onPatchAssembly");
+		AssemblyService assemblyService = new AssemblyService(activeProject);
+		assemblyService.patchAssembly();
+		
+		System.out.println("onBuildAssembly");
+		assemblyService.buildAssembly();
+		
+		System.out.println("RunPatchedBinary");
+		PatchedBinaryService patchedBinaryService = new PatchedBinaryService(activeProject);
+		patchedBinaryService.runPatchedBinary();
+		
+		System.out.println("BuildTeSSLa");
+		TeSSLaService teSSLaService = new TeSSLaService(activeProject);
+		teSSLaService.addStandardLibrary();
+		
+		System.out.println("RunTeSSLa");
+		teSSLaService.runTeSSLa();
+		
+		//TODO
+		dockerSerivce.stopContainer();
 	}
 	
 }

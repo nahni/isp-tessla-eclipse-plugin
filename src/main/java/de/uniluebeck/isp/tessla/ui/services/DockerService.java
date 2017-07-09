@@ -37,8 +37,7 @@ public class DockerService {
 	public void startDocker() {
 		
 		String host_dir = activeProject.getContainerDir();
-//		String tesslaFilePath = "/home/annika/Entwicklung/Files/tessla2-docker";
-		String tesslaFilePath = "/media/fritzi/shared/Master/4. Semester/SSE Projekt/tessla2-docker";
+		String tesslaFilePath = activeProject.getDockerFile();
 	
 		String[] loadArgsArray = new String[] {"docker", "load", "-i",tesslaFilePath};
 		runCommand(loadArgsArray);

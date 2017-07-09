@@ -26,22 +26,32 @@ public class TeSSLaProject {
 
 	private String containerDir;
 	private String dockerFile;
+	public String getDockerFile() {
+		return dockerFile;
+	}
+
 	private String outputDir;
 	private String binName;
 	
 	public TeSSLaProject(){
 	}
 	
-	public String getDockerContainerPath(){
-		return loadPluginSettings(TesslaPreferencePage.DOCKER_FILE_PREFERENCE);
+	
+	public TeSSLaProject(String containerDir, String dockerFile){
+		this.containerDir = containerDir;
+		this.dockerFile = dockerFile;
 	}
 	
-	private String loadPluginSettings(String key) {
-		IEclipsePreferences prefs =
-			    InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
-
-		return prefs.get(key, "def");
-	}
+//	public String getDockerContainerPath(){
+//		return loadPluginSettings(TesslaPreferencePage.DOCKER_FILE_PREFERENCE);
+//	}
+//	
+//	private String loadPluginSettings(String key) {
+//		IEclipsePreferences prefs =
+//			    InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+//
+//		return prefs.get(key, "def");
+//	}
 
 	public List<File> getCFiles(){
 		FileFilter filter = new FileFilter();
@@ -66,14 +76,15 @@ public class TeSSLaProject {
 	}
 	
 	public String getProjectPath() {
+		//TODO
 //		geht das nur im Plugin? So wirfts nen Fehler: Workspace is closed.
 //		projectPath = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
-//		System.out.println(projectPath);
-//		String projectPath = "/home/annika/Entwicklung/Spielwiese/dummyProjectPath3/sub_add_alternation";
 		
-//		String projectPath = "/media/fritzi/shared/Master/4. Semester/SSE Projekt/sub_add_alternation";
+		System.out.println("Test workspacedir: " + ResourcesPlugin.getWorkspace().getRoot().getLocation().toString());
 		
-		return loadPluginSettings(TesslaPreferencePage.PROJECT_PATH_PREFERENCE);
+		//TODO das hier nur kurz fuer die Entwicklung. Wird spaeter der Workspace-Path
+		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+		return prefs.get(TesslaPreferencePage.PROJECT_PATH_PREFERENCE, null);
 	}
 	
 	public String getOutputDir() {
@@ -90,11 +101,6 @@ public class TeSSLaProject {
 	 */
 	public String getBinName() {
 		if(StringUtils.isBlank(binName)){
-//      The path.basename() methods returns the last portion of a path, similar to the Unix basename command.
-//      For example:
-//      path.basename('/foo/bar/baz/asdf/quux.html');
-//      Returns: 'quux.html'
-//    this.binName = path.basename(this.projPath).replace(' ', '_')
 			String project = getProjectPath();
 			if(project.endsWith("/")){
 				project = project.substring(0, project.length() - 1);
@@ -120,7 +126,10 @@ public class TeSSLaProject {
 //			//TODO
 //			this.containerDir = "/home/annika/.tessla-env";
 //		}
-//		return containerDir;
-		return loadPluginSettings(TesslaPreferencePage.CONTAINER_DIR_PREFERENCE);
+		
+		
+//		return loadPluginSettings(TesslaPreferencePage.CONTAINER_DIR_PREFERENCE);
+		
+		return containerDir;
 	}
 }

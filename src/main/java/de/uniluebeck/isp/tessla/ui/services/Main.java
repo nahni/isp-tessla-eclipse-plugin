@@ -8,6 +8,7 @@ import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.exceptions.DockerException;
 
 import de.uniluebeck.isp.tessla.model.TeSSLaProject;
+import de.uniluebeck.isp.tessla.util.PreferencesUtil;
 
 public class Main {
 
@@ -24,7 +25,7 @@ public class Main {
 	
 	public void run() throws FileNotFoundException, DockerCertificateException, IOException, DockerException, InterruptedException{
 		
-		activeProject = new TeSSLaProject();
+		activeProject = PreferencesUtil.getTesslaProjectConfig();
 		
 		DockerService dockerSerivce = new DockerService(activeProject);
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
@@ -53,7 +54,7 @@ public class Main {
 	}
 	
 	public void copyFiles(){
-		activeProject = new TeSSLaProject();
+		activeProject = PreferencesUtil.getTesslaProjectConfig();
 		
 		//iwie sollte das wo anders hin oder die Methode umbeannt werden
 		WorkingDirFileService workingDirFileService = new WorkingDirFileService(activeProject);

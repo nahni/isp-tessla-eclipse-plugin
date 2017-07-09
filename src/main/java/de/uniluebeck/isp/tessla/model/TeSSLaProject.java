@@ -9,8 +9,18 @@ import org.apache.commons.lang.StringUtils;
 import de.uniluebeck.isp.tessla.ui.Activator;
 import de.uniluebeck.isp.tessla.ui.TesslaPreferencePage;
 import de.uniluebeck.isp.tessla.util.FileFilter;
+
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 public class TeSSLaProject {
 
@@ -60,8 +70,10 @@ public class TeSSLaProject {
 //		projectPath = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
 //		System.out.println(projectPath);
 //		String projectPath = "/home/annika/Entwicklung/Spielwiese/dummyProjectPath3/sub_add_alternation";
-		String projectPath = "/media/fritzi/shared/Master/4. Semester/SSE Projekt/sub_add_alternation";
-		return projectPath;
+		
+//		String projectPath = "/media/fritzi/shared/Master/4. Semester/SSE Projekt/sub_add_alternation";
+		
+		return loadPluginSettings(TesslaPreferencePage.PROJECT_PATH_PREFERENCE);
 	}
 	
 	public String getOutputDir() {

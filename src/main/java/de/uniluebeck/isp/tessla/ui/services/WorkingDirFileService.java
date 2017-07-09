@@ -60,9 +60,6 @@ public class WorkingDirFileService {
 			File src = new File(activeProject.getProjectPath());
 			File dest = new File(activeProject.getContainerDir());
 			
-			printStd("src: "+src);
-			printStd("dest: "+dest);
-			
 			FileUtils.copyDirectory(src, dest, new WorkingDirFileFilter());
 			
 		} catch (IOException e) {

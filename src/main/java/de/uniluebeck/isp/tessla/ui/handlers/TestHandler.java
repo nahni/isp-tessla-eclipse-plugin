@@ -36,6 +36,7 @@ public class TestHandler extends AbstractHandler {
 		
 		printStd(loadPluginSettings(TesslaPreferencePage.DOCKER_FILE_PREFERENCE));
 		printStd(loadPluginSettings(TesslaPreferencePage.CONTAINER_DIR_PREFERENCE));
+		printStd(loadPluginSettings(TesslaPreferencePage.PROJECT_PATH_PREFERENCE));
 		
 		return null;
 	}

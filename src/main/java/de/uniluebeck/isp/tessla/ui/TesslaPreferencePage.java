@@ -10,6 +10,7 @@ public class TesslaPreferencePage extends FieldEditorPreferencePage implements I
 	
 	public static final String DOCKER_FILE_PREFERENCE = "dockerFile";
 	public static final String CONTAINER_DIR_PREFERENCE = "test";
+	public static final String PROJECT_PATH_PREFERENCE = "projPath";
 	
 	public TesslaPreferencePage() {
 		super(GRID);
@@ -21,6 +22,7 @@ public class TesslaPreferencePage extends FieldEditorPreferencePage implements I
 	protected void createFieldEditors() {
 		addField(new FileFieldEditor(DOCKER_FILE_PREFERENCE, "Docker File: ", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(CONTAINER_DIR_PREFERENCE, "Container dir: ", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PROJECT_PATH_PREFERENCE, "Project: ", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

@@ -6,11 +6,15 @@ import java.io.IOException;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.exceptions.DockerException;
 
 import de.uniluebeck.isp.tessla.model.TeSSLaProject;
+import de.uniluebeck.isp.tessla.ui.Activator;
+import de.uniluebeck.isp.tessla.ui.TesslaPreferencePage;
 import de.uniluebeck.isp.tessla.ui.services.CommandArgsService;
 import de.uniluebeck.isp.tessla.ui.services.ConsoleService;
 import de.uniluebeck.isp.tessla.ui.services.DockerService;
@@ -30,17 +34,17 @@ public class TestHandler extends AbstractHandler {
 		
 		printStd("Hello from TestHandler!");
 		
-		copyFiles();
-		printStd("copied files");
-		
-		try {
-			run();
-			printStd("run successful");
-		} catch (DockerCertificateException | IOException | DockerException | InterruptedException e) {
-			printStd(e.getMessage());
-		}
+		printStd(loadPluginSettings(TesslaPreferencePage.DOCKER_FILE_PREFERENCE));
+		printStd(loadPluginSettings(TesslaPreferencePage.CONTAINER_DIR_PREFERENCE));
 		
 		return null;
+	}
+	
+	private String loadPluginSettings(String key) {
+
+		IEclipsePreferences prefs =
+			    InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID); 
+		return prefs.get(key, "def");
 	}
 	
 	private void printStd(String text){

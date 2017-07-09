@@ -1,7 +1,5 @@
 package de.uniluebeck.isp.tessla.util;
 
-import java.util.prefs.Preferences;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
@@ -16,13 +14,16 @@ import de.uniluebeck.isp.tessla.ui.Activator;
 public class PreferencesUtil {
 
 	public static TeSSLaProject getTesslaProjectConfig(){
-		IEclipsePreferences prefs =
-			    InstanceScope.INSTANCE.getNode("de.uniluebeck.isp.Tessla.ui"); // does all the above behind the scenes
-
-		String dockerFile= prefs.get("dockerFile", "def");
-		String containerDir= prefs.get("containerDir", "def2");
+//		IEclipsePreferences prefs =
+//			    InstanceScope.INSTANCE.getNode("de.uniluebeck.isp.Tessla.ui"); // does all the above behind the scenes
+//
+//		String dockerFile= prefs.get("dockerFile", "def");
+//		String containerDir= prefs.get("containerDir", "def2");
+//		
+//		return new TeSSLaProject(containerDir, dockerFile);
 		
-		return new TeSSLaProject(containerDir, dockerFile);
+		return new TeSSLaProject();
+		
 	}
 	
 	public static void probe2(){

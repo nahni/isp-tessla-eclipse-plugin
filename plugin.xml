@@ -9,11 +9,6 @@
             id="de.uniluebeck.isp.Tessla.ui.commands.category">
       </category>
       <command
-            name="Sample Command"
-            categoryId="de.uniluebeck.isp.Tessla.ui.commands.category"
-            id="de.uniluebeck.isp.Tessla.ui.commands.sampleCommand">
-      </command>
-      <command
             name="Run Command"
             categoryId="de.uniluebeck.isp.Tessla.ui.commands.category"
             id="de.uniluebeck.isp.Tessla.ui.commands.runCommand">
@@ -52,10 +47,6 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            commandId="de.uniluebeck.isp.Tessla.ui.commands.sampleCommand"
-            class="de.uniluebeck.isp.tessla.ui.handlers.SampleHandler">
-      </handler>
-      <handler
             commandId="de.uniluebeck.isp.Tessla.ui.commands.testCommand"
             class="de.uniluebeck.isp.tessla.ui.handlers.TestHandler">
       </handler>
@@ -85,15 +76,6 @@
       </handler>                      
    </extension>
    <extension
-         point="org.eclipse.ui.bindings">
-      <key
-            commandId="de.uniluebeck.isp.Tessla.ui.commands.sampleCommand"
-            contextId="org.eclipse.ui.contexts.window"
-            sequence="M1+6"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </key>
-   </extension>
-   <extension
          point="org.eclipse.ui.menus">
       <menuContribution
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
@@ -101,11 +83,6 @@
                label="Tessla"
                mnemonic="M"
                id="de.uniluebeck.isp.Tessla.ui.menus.tessla">
-            <command
-                  commandId="de.uniluebeck.isp.Tessla.ui.commands.sampleCommand"
-                  mnemonic="S"
-                  id="de.uniluebeck.isp.Tessla.ui.menus.sampleCommand">
-            </command>
             <command
                   commandId="de.uniluebeck.isp.Tessla.ui.commands.testCommand"
                   id="de.uniluebeck.isp.Tessla.ui.menus.testCommand">

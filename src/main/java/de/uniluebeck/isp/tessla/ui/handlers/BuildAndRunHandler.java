@@ -124,7 +124,7 @@ public class BuildAndRunHandler extends AbstractHandler {
 //		main.run();
 		
 		System.out.println("getContainerDir: " + activeProject.getContainerDir());
-		System.out.println("getDockerFile: " + activeProject.getDockerFile());
+		System.out.println("getDockerFile: " + activeProject.getDockerContainerPath());
 		
 		PreferencesUtil.probe2();
 		PreferencesUtil.probe3();

@@ -61,8 +61,6 @@ public class BuildAndRunAndAnalyzeHandler extends AbstractHandler {
 		String[] compileToLLVM_BC_Args = commandArgsService.getCompileToLLVM_BC_Args();
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(compileToLLVM_BC_Args);
 		
-		printStd("compiled");
-		
 		String[] instrument_BC_Args = commandArgsService.getInstrument_BC_Args();
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(instrument_BC_Args);
 		

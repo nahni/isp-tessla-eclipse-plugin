@@ -6,8 +6,11 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import de.uniluebeck.isp.tessla.ui.Activator;
+import de.uniluebeck.isp.tessla.ui.TesslaPreferencePage;
 import de.uniluebeck.isp.tessla.util.FileFilter;
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class TeSSLaProject {
 
@@ -19,13 +22,15 @@ public class TeSSLaProject {
 	public TeSSLaProject(){
 	}
 	
-	public TeSSLaProject(String containerDir, String pathToDockerFile){
-		this.containerDir = containerDir;
-		this.dockerFile = pathToDockerFile;
+	public String getDockerContainerPath(){
+		return loadPluginSettings(TesslaPreferencePage.DOCKER_FILE_PREFERENCE);
 	}
 	
-	public String getDockerFile() {
-		return dockerFile;
+	private String loadPluginSettings(String key) {
+		IEclipsePreferences prefs =
+			    InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+
+		return prefs.get(key, "def");
 	}
 
 	public List<File> getCFiles(){
@@ -54,7 +59,8 @@ public class TeSSLaProject {
 //		geht das nur im Plugin? So wirfts nen Fehler: Workspace is closed.
 //		projectPath = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
 //		System.out.println(projectPath);
-		String projectPath = "/home/annika/Entwicklung/Spielwiese/dummyProjectPath3/sub_add_alternation";
+//		String projectPath = "/home/annika/Entwicklung/Spielwiese/dummyProjectPath3/sub_add_alternation";
+		String projectPath = "/media/fritzi/shared/Master/4. Semester/SSE Projekt/sub_add_alternation";
 		return projectPath;
 	}
 	
@@ -98,10 +104,11 @@ public class TeSSLaProject {
 		//Das Eclipse muss im Moment als Admin gestratet werden, daher waere das ContainerDir
 		// root/.tessla zu Entwicklungszewecken hab ich das mal umgebogen
 //		return System.getProperty("user.home") + "/" + ".tessla-env";
-		if(StringUtils.isEmpty(containerDir)){
-			//TODO
-			this.containerDir = "/home/annika/.tessla-env";
-		}
-		return containerDir;
+//		if(StringUtils.isEmpty(containerDir)){
+//			//TODO
+//			this.containerDir = "/home/annika/.tessla-env";
+//		}
+//		return containerDir;
+		return loadPluginSettings(TesslaPreferencePage.CONTAINER_DIR_PREFERENCE);
 	}
 }

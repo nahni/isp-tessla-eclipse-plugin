@@ -4,11 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.exceptions.DockerException;
@@ -18,9 +15,7 @@ import de.uniluebeck.isp.tessla.ui.services.CommandArgsService;
 import de.uniluebeck.isp.tessla.ui.services.ConsoleService;
 import de.uniluebeck.isp.tessla.ui.services.DockerService;
 import de.uniluebeck.isp.tessla.util.Constants;
-import de.uniluebeck.isp.tessla.util.CopyFilesToContainer;
-
-import org.eclipse.jface.dialogs.MessageDialog;
+import de.uniluebeck.isp.tessla.util.PreferencesUtil;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -40,9 +35,6 @@ public class BuildAndRunAndAnalyzeHandler extends AbstractHandler {
 		
 		this.activeProject = new TeSSLaProject();
 		
-		CopyFilesToContainer copyClass = new CopyFilesToContainer();
-		copyClass.copyFiles(activeProject);
-		
 		try {
 			printStd("Build, run and analyze project...");
 			run();
@@ -55,7 +47,11 @@ public class BuildAndRunAndAnalyzeHandler extends AbstractHandler {
 	
 	private void run() throws FileNotFoundException, DockerCertificateException, IOException, DockerException, InterruptedException{
 		
+		activeProject = PreferencesUtil.getTesslaProjectConfig();
+		
 		DockerService dockerSerivce = new DockerService(activeProject);
+		dockerSerivce.startDocker();
+		
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
 		
 		String[] compileToLLVM_BC_Args = commandArgsService.getCompileToLLVM_BC_Args();
@@ -77,8 +73,8 @@ public class BuildAndRunAndAnalyzeHandler extends AbstractHandler {
 		String[] runTeSSLa_Args = commandArgsService.getRunTeSSLa_Args();
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(runTeSSLa_Args);
 		
-//		
-//		dockerSerivce.stopContainer();
+		//TODO
+		dockerSerivce.stopContainer();
 	}
 	
 	private void printStd(String text){

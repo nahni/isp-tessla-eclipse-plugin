@@ -58,8 +58,9 @@ public class Main {
 		
 		//iwie sollte das wo anders hin oder die Methode umbeannt werden
 		WorkingDirFileService workingDirFileService = new WorkingDirFileService(activeProject);
-		workingDirFileService.createWorkingDir();
-		workingDirFileService.transferFilesToContainer();
+//		workingDirFileService.createWorkingDir();
+//		workingDirFileService.transferFilesToContainer();
+		workingDirFileService.createWorkingDirWithCopiedRessources();
 	}
 
 }

@@ -36,9 +36,18 @@ public class WorkingDirFileService {
 	}
 	
 	/**
+	 * Erstelt das Verzeichnis auf dem Host-Computer, das in den Docker-Container gemappt wird 
+	 * und kopiert die Dateien aus dem Workspace dorthin
+	 */
+	public void createWorkingDirWithCopiedRessources(){
+		createWorkingDir();
+		transferFilesToContainer();
+	}
+	
+	/**
 	 * Erstelt das Verzeichnis auf dem Host-Computer, das in den Docker-Container gemappt wird auf /tessla
 	 */
-	public void createWorkingDir(){
+	private void createWorkingDir(){
 		printStd("ContainerDir: " + activeProject.getContainerDir());
 		Path path = Paths.get(activeProject.getContainerDir());
 		try {
@@ -49,7 +58,10 @@ public class WorkingDirFileService {
 		}
 	}
 	
-	public void transferFilesToContainer(){
+	/**
+	 * Kopiert die Dateien aus dem Workspace in das Verzeichnis ContainerDir
+	 */
+	private void transferFilesToContainer(){
 		
 		try {
 			FileUtils.cleanDirectory(new File(activeProject.getContainerDir()));
@@ -70,15 +82,7 @@ public class WorkingDirFileService {
 	}
 	
 	private void createZlogFile(){
-		//TODO
-//	    // craft content of zlog file
-//	    var binName   = this.activeProject.binName
-//
-//	    var formats = '[formats]\n'
-//	    formats += 'variable_values = "' + atom.config.get('tessla.variableValueFormatting') + '"\n'
-//	    formats += 'function_calls = "'  + atom.config.get('tessla.functionCallFormatting') + '"\n'
-//	    
-		
+
 		try {
 			PrintWriter out = new PrintWriter(this.activeProject.getContainerDir() + "/" + "zlog.conf");
 			
@@ -90,29 +94,9 @@ public class WorkingDirFileService {
 			formats = formats + "variable_values = \"" + atom_config_variableValueFormatting + "\"\n";
 			formats = formats + "function_calls = \""  + atom_config_functionCallFormatting + "\"\n";
 			
-			
-			
-//	    var rules = '[rules]\n'
-//	    rules += 'variable_values_cat.DEBUG "' + 'instrumented_' + binName + '.trace"; variable_values\n'
-//	    rules += 'function_calls_cat.DEBUG "'  + 'instrumented_' + binName + '.trace"; function_calls\n'
-//
 			String rules = "[rules]\n";
 			rules = rules + "variable_values_cat.DEBUG \"" + "instrumented_" + binName + ".trace\"; variable_values\n";
 			rules = rules + "function_calls_cat.DEBUG \""  + "instrumented_" + binName + ".trace\"; function_calls\n";
-			
-			
-//	    // first remove existing zlog
-//	    if ( fs.existsSync(path.join(this.containerDir, 'zlog.conf')) ) {
-//	      fs.unlinkSync(path.join(this.containerDir, 'zlog.conf'))
-//	    }
-//
-//	    // then create new zlog.conf file
-//	    fs.writeFileSync(path.join(this.containerDir, 'zlog.conf'), formats + rules)
-			
-//			out.println(formats);
-//			out.println(rules);
-			
-//			out.close();
 			
 			FileUtils.writeStringToFile(new File(this.activeProject.getContainerDir() + "/build/" + "zlog.conf"), formats + rules);
 			

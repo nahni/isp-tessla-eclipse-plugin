@@ -21,6 +21,7 @@ import de.uniluebeck.isp.tessla.ui.services.DockerService;
 import de.uniluebeck.isp.tessla.ui.services.Main;
 import de.uniluebeck.isp.tessla.ui.services.PatchedBinaryService;
 import de.uniluebeck.isp.tessla.ui.services.TeSSLaService;
+import de.uniluebeck.isp.tessla.ui.services.WorkingDirFileService;
 import de.uniluebeck.isp.tessla.util.PreferencesUtil;
 
 /**
@@ -30,19 +31,9 @@ import de.uniluebeck.isp.tessla.util.PreferencesUtil;
  */
 public class BuildAndRunHandler extends AbstractHandler {
 	
-	TeSSLaProject activeProject;
-	
-//	int launchCount;
-//
-//	@Inject
-//	public void setLaunchCount(
-//			@Preference(nodePath = "com.packtpub.e4.clock.ui", value = "launchCount") int launchCount) {
-//		this.launchCount = launchCount;
-//	}
+
 	
 	public BuildAndRunHandler(){
-		
-		activeProject = PreferencesUtil.getTesslaProjectConfig();
 		
 	}
 	
@@ -50,23 +41,7 @@ public class BuildAndRunHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-//		MessageDialog.openInformation(
-//				window.getShell(),
-//				"Ui",
-//				"Build And Run");
-		
-		//Versuch 1
-//		try {
-////			Process p = Runtime.getRuntime().exec("docker images");
-//			Process p = Runtime.getRuntime().exec("docker load -i C:/Users/lenovo/Downloads/Atom/tessla");
-//			
-//			InputStream errors = p.getErrorStream();
-//			
-//			System.out.println("fertig");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			System.out.println("Exc");
-//		}
+
 		System.out.println("BuildAndRunHandler");
 		try {
 			onCompileAndRunProject();
@@ -96,34 +71,12 @@ public class BuildAndRunHandler extends AbstractHandler {
 	}
 	
 	private void onCompileAndRunProject() throws FileNotFoundException, DockerCertificateException, IOException, DockerException, InterruptedException {
-
-//	    // start compilation process
-//	    this.onBuildCCode({                               // First compile C code into Assembly
-//	      onSuccess: () => this.onPatchAssembly({         // then patch Assembly
-//	        onSuccess: () => this.onBuildAssembly({       // compile patched Assembly
-//	          onSuccess: () => this.onRunPatchedBinary({  // run patched binary
-//	            onSuccess: () => this.onBuildTeSSLa({     // build TeSSLa code
-//	              onSuccess: () => this.onRunTeSSLa({
-//	                onSuccess: (lines) => {
-//	                  //console.log(startTime)
-//	                  // emit signal that components can update with correct output values
-//	                  this.emitter.emit('format-tessla-output', {output: lines})
-//	                }
-//	              }),  // run TeSSLa server
-//	              onError: this.viewMgr.highlightTeSSLaError
-//	            })
-//	          })
-//	        })
-//	      }),
-//	      buildAssembly: true
-//	    })		
 		
-		//TODO
-		Main main = new Main();
-		main.copyFiles();
-//		main.run();
+		TeSSLaProject activeProject = PreferencesUtil.getTesslaProjectConfig();
 		
-		activeProject = PreferencesUtil.getTesslaProjectConfig();
+		WorkingDirFileService workingDirFileService = new WorkingDirFileService(activeProject);
+		workingDirFileService.createWorkingDirWithCopiedRessources();
+		
 		System.out.println("getContainerDir: " + activeProject.getContainerDir());
 		System.out.println("getDockerFile: " + activeProject.getDockerFile());
 		

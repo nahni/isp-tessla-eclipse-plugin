@@ -100,7 +100,7 @@ public class DockerService {
 	
 	
 	
-	public void stopContainer() throws DockerException, InterruptedException{
+	public void stopContainer() {
 		// Kill container
 		String[] argsArray = new String[] {"docker", "stop", "tessla"};
 		runCommand(argsArray);

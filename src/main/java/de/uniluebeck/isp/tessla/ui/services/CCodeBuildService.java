@@ -10,6 +10,10 @@ public class CCodeBuildService {
 		this.activeProject = activeProject;
 	}
 
+	/**
+	 * build C Code
+	 * 
+	 */
 	public void buildCCode() {
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
 		String[] compileToLLVM_BC_Args = commandArgsService.getCompileToLLVM_BC_Args();

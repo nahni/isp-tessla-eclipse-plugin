@@ -10,6 +10,9 @@ public class AssemblyService {
 		this.activeProject = activeProject;
 	}
 	
+	/**
+	 * Patch Assembly
+	 */
 	public void patchAssembly() {
 //		getInstrument_BC_Args:  instrument sub_add_alternation.bc
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
@@ -19,6 +22,9 @@ public class AssemblyService {
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(instrument_BC_Args);
 	}
 	
+	/**
+	 * Build Assembly
+	 */
 	public void buildAssembly() {
 //		getCompileToBinary_Args:  clang -linstrumentation sub_add_alternation.bc -o sub_add_alternation
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);

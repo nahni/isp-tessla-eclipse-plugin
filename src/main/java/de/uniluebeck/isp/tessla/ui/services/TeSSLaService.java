@@ -10,6 +10,9 @@ public class TeSSLaService {
 		this.activeProject = activeProject;
 	}
 	
+	/**
+	 * Build TeSSLa - add Standard Library
+	 */
 	public void addStandardLibrary(){
 //		getAddStandardLibrary_Args:  sh -c cat spec.tessla /usr/local/opt/tessla_rv/streams.tessla > spec2.tessla
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
@@ -19,6 +22,9 @@ public class TeSSLaService {
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(addStandardLibrary_Args);
 	}
 	
+	/**
+	 * Run TeSSLa
+	 */
 	public void runTeSSLa(){
 //		getRunTeSSLa_Args:  sh -c cd /tessla && tessla spec2.tessla traces.log
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);

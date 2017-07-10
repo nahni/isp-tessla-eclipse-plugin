@@ -10,6 +10,9 @@ public class PatchedBinaryService {
 		this.activeProject = activeProject;
 	}
 
+	/**
+	 * Patched Binary
+	 */
 	public void runPatchedBinary() {
 		// getRunBinary_Args: ./sub_add_alternation
 		CommandArgsService commandArgsService = new CommandArgsService(activeProject);
@@ -17,7 +20,5 @@ public class PatchedBinaryService {
 
 		DockerService dockerSerivce = new DockerService(activeProject);
 		dockerSerivce.runDockerCommandAvoidingWordSplitting2(runBinary_Args);
-
-		// TODO: wo kommt auf einmal das Trace-File her? Das wurde vorher hier erstellt.
 	}
 }
